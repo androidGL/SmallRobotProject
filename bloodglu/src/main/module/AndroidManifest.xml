@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pcare.bloodglu">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="com.pcare.bloodglu.MainActivity">
+        </activity>
+        <!--血糖-->
+        <activity android:name=".GlucoseActivity" />
+        <activity android:name=".GluTrendChartActivity" />
+    </application>
+
+
+</manifest>

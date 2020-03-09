@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_height"
+            android:background="@color/main_color"
+            android:gravity="center"
+            android:text="血压记录"
+            android:textColor="@color/title_text"
+            android:textSize="@dimen/title_size" />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="@dimen/title_height_top"
+            android:onClick="back"
+            android:padding="10dp"
+            android:src="@mipmap/back" />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="@dimen/title_height_top"
+            android:onClick="toChartActivity"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/wave" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/view_list_bpm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.pcare.common.util.TextImageView
+        android:id="@+id/null_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:text="暂无记录"
+        app:textSize="@dimen/small_size"
+        app:textColor="@color/text_color"
+        app:imageSrc="@mipmap/null_record"
+        app:imageSize="200dp"
+        android:visibility="gone"/>
+
+
+</LinearLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pcare.bloodpressure">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <!--血压-->
+        <activity android:name=".activity.BPMActivity" />
+        <activity android:name=".activity.BPMHistoryActivity" />
+        <activity android:name=".activity.BPMTrendChartActivity" />
+    </application>
+
+</manifest>

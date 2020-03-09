@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">福娃</string>
+    <string name="main_page">p-care预诊系统</string>
+    <string name="send">发送</string>
+    <string name="look">望</string>
+    <string name="listener">闻</string>
+    <string name="request">问诊</string>
+    <string name="pulse">切</string>
+    <string name="register">完善个人信息</string>
+
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="action_connect">连接</string>
+    <string name="action_add_device">ADD DEVICE</string>
+    <string name="action_connecting">连接中…</string>
+    <string name="action_disconnect">断开连接</string>
+    <string name="action_disconnecting">断开连接中…</string>
+
+    <string name="battery">%d%%</string>
+    <string name="not_available">n/a</string>
+    <string name="not_available_value">" - "</string>
+    <string name="no_ble">Device doesn\'t have BLE support!</string>
+    <string name="no_apps">No profiles found.</string>
+    <string name="not_supported">The device does not have required services.</string>
+    <string name="no_required_permission">Permission denied.</string>
+    <string name="scanner_title">Select device:</string>
+    <string name="scanner_empty">No device found</string>
+    <string name="scanner_action_scan">Scan</string>
+    <string name="scanner_action_cancel">Cancel</string>
+    <string name="scanner_subtitle_bonded">BONDED DEVICES:</string>
+    <string name="scanner_subtitle_not_bonded">AVAILABLE DEVICES:</string>
+    <string name="scanner_permission_rationale">Since Android 6.0 Marshmallow system requires granting access to device\'s location in order to scan for Bluetooth Smart devices. Bluetooth beacons may be used to determine the phone\'s and user\'s location.</string>
+
+    <string name="bonding">Bonding with the device&#8230;</string>
+    <string name="bonded">The device is now bonded.</string>
+    <string name="bonding_failed">Bonding failed.</string>
+    <string name="health_tip">建议您平时生活，注意低盐、低脂饮食；多吃蔬菜水果；注意补充钾、钙；限酒、戒烟，减轻工作压力、精神压力；控制体重，适量运动；定期监测血压。如血压仍然异常，请及时到医院就诊。</string>
+
+</resources>
