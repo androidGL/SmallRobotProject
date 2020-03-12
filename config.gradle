@@ -4,8 +4,8 @@ ext {
                buildToolsVersion       : "29.0.2",
                minSdkVersion           : 24,
                targetSdkVersion        : 27,
-               versionCode             : 100000,
-               versionName             : "1.0.0",
+               versionCode             : 200000,
+               versionName             : "2.0.0",
                androidSupportSdkVersion: "28.0.3",
                dagger2SdkVersion       : "2.6",
     ]
