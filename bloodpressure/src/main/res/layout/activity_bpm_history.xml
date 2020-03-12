@@ -31,6 +31,7 @@
             android:layout_alignParentRight="true"
             android:src="@mipmap/wave" />
     </RelativeLayout>
+    <include layout="@layout/view_date_select"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/view_list_bpm"

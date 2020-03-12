@@ -23,7 +23,6 @@
 
     <color name="unselect">#f5f5f5</color>
     <color name="select">#BDBDBD</color>
-    <color name="red">#FF0000</color>
     <color name="result_param_text_color">#8B5A00</color>
     <color name="line_grey">#DBDBDB</color>
     <color name="line_blue">#53868B</color>
@@ -37,4 +36,9 @@
     <color name="main_title">#008B8B</color>
     <color name="table_bpm">#F0FFFF</color>
     <color name="list_title">#F0FFFF</color>
+
+    <color name="red">#D81E06</color>
+    <color name="yellow">#F4EA2A</color>
+    <color name="green">#1AFA29</color>
+
 </resources>

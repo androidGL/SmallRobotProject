@@ -136,6 +136,16 @@ public class BPMTableController {
         return bpmEntities;
     }
     /**
+     * 按条件查询数据
+     */
+    public List<BPMEntity> searchByUserId(String userId,Date startDate,Date endDate){
+        List<BPMEntity> bpmEntities = (List<BPMEntity>) bpmEntityDao.queryBuilder().where(bpmEntityDao.queryBuilder()
+                        .and(BPMEntityDao.Properties.UserId.eq(userId),
+                                BPMEntityDao.Properties.TimeData.ge(startDate),
+                                BPMEntityDao.Properties.TimeData.between(startDate,endDate))).list();
+        return bpmEntities;
+    }
+    /**
      * 查询所有数据
      */
     public List<BPMEntity> searchAll(){

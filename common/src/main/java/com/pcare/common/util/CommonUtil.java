@@ -1,5 +1,6 @@
 package com.pcare.common.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -21,5 +22,25 @@ public class CommonUtil {
     }
     public static String getDateStr(Date date) {
         return getDateStr(date,null);
+    }
+
+    public static Date getDate(String date, String format){
+        if(null == date){
+            return null;
+        }
+        if (format == null || format.isEmpty()) {
+            format = "yyyy-MM-dd";
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        try {
+            return formatter.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    public static Date getDate(String date){
+        return getDate(date,null);
     }
 }

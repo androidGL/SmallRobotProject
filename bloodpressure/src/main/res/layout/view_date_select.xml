@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择日期:"
+            android:layout_marginRight="10dp"
+            android:textSize="@dimen/main_text_size"/>
+        <TextView
+            android:id="@+id/date_start"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/main_text_size"
+            android:tag="start"
+            android:padding="5dp"
+            android:onClick="selectDate"
+            android:hint="开始日期"
+            android:background="@drawable/bg_check_gray"/>
+        <View
+            android:layout_width="10dp"
+            android:layout_height="1dp"
+            android:background="@color/text_color"
+            android:layout_margin="5dp"/>
+        <TextView
+            android:id="@+id/date_end"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:hint="结束日期"
+            android:tag="end"
+            android:padding="5dp"
+            android:onClick="selectDate"
+            android:textSize="@dimen/main_text_size"
+            android:background="@drawable/bg_check_gray"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:onClick="clearDate"
+            android:src="@mipmap/reset_date"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:onClick="filterList"
+            android:src="@mipmap/search_date"/>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="5dp"
+        android:background="@color/line_grey"
+        />
+
+</LinearLayout>

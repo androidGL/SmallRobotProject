@@ -251,7 +251,7 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
         }
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2020, Integer.valueOf(monthS), Integer.valueOf(dayS),Integer.valueOf(hourS),Integer.valueOf(minS));
+        calendar.set(2020, Integer.valueOf(monthS)-1, Integer.valueOf(dayS),Integer.valueOf(hourS),Integer.valueOf(minS));
         if (null == mBPMEntity) {
             mBPMEntity = new BPMEntity();
         }
@@ -261,7 +261,7 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
         mBPMEntity.setMeanAPData("80.0");
         mBPMEntity.setPulseData("70.0");
         mBPMEntity.setTimeData(calendar.getTime());
-        mBPMEntity.setBpmId(UserDao.getCurrentUserId() + "-" + calendar.getTime());
+        mBPMEntity.setBpmId(UserDao.getCurrentUserId() + "-" + CommonUtil.getDateStr(calendar.getTime()));
         mBPMEntity.setUnit(getString(R.string.bpm_unit_mmhg));
         insertToNet(true);
 
@@ -285,6 +285,8 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        //TODO 暂时先保存下来
+                        BPMTableController.getInstance(getApplicationContext()).insert(mBPMEntity);
                     }
                 });
     }
