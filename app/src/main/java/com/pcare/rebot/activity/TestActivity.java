@@ -107,6 +107,8 @@ public class TestActivity extends BaseActivity {
     @Override
     public void start() {
         super.start();
+
+
 //        testCurve();
 //        getUser();
 //        testGetBPMList();
@@ -174,6 +176,10 @@ public class TestActivity extends BaseActivity {
     }
 
     public void addGLU(View v) {
+        if(getIntent().hasExtra("userInfo")){
+            finish();
+            return;
+        }
         if (TextUtils.isEmpty(editText.getText().toString())) {
             Toast.makeText(this, "输入用户ID", Toast.LENGTH_SHORT);
             return;

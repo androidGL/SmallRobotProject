@@ -39,6 +39,12 @@ public abstract class BaseActivity<P extends IPresenter> extends Activity implem
             userNameText.setText(UserDao.get(getApplicationContext()).getCurrentUser().getUserName());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initResumeData();
+    }
+
     public abstract int getLayoutId();
 
     // 绑定Presenter
@@ -53,6 +59,10 @@ public abstract class BaseActivity<P extends IPresenter> extends Activity implem
 
     }
     protected void initData(){
+
+    }
+
+    protected void initResumeData(){
 
     }
 

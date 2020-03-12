@@ -38,7 +38,6 @@ public class FaceActivity extends BaseActivity {
                     public void detectSucess() {
                         if (getIntent().hasExtra("resource") && "register".equals(getIntent().getStringExtra("resource"))) {
                             Toast.makeText(getApplicationContext(), "添加新用户成功", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(FaceActivity.this, MainActivity.class));
                         }
                         finish();
                     }
@@ -55,7 +54,7 @@ public class FaceActivity extends BaseActivity {
                         if (getIntent().hasExtra("resource") && "login".equals(getIntent().getStringExtra("resource"))) {
                             if (UserDao.get(getSelfActivity()).setCurrentUser(userId)) {
                                 Toast.makeText(getApplicationContext(), "登陆成功", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(FaceActivity.this, MainActivity.class));
+//                                startActivity(new Intent(FaceActivity.this, MainActivity.class));
                             }
 
                         }

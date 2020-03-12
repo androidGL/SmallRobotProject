@@ -11,12 +11,15 @@ import android.widget.Toast;
 import com.pcare.common.base.BaseActivity;
 import com.pcare.common.entity.UserEntity;
 import com.pcare.common.table.UserDao;
+import com.pcare.common.util.LogUtil;
 import com.pcare.common.view.CommonAlertDialog;
 import com.pcare.common.view.ScreenCheckBox;
 import com.pcare.common.view.YearPickerDialog;
 import com.pcare.rebot.R;
 import com.pcare.rebot.contract.RegisterContract;
 import com.pcare.rebot.presenter.RegisterPresenter;
+
+import java.io.Serializable;
 
 
 /**
@@ -123,33 +126,32 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     @Override
     public void saveUser(UserEntity userInfo) {
-        UserDao.get(getApplicationContext()).insertUser(userInfo);
-        UserDao.get(getApplicationContext()).setCurrentUser(userInfo);
-        CommonAlertDialog.Builder(this)
-                .setTitle("人脸识别认证")
-                .setMessage("为了更方便快捷的使用本设备，建议您进行人脸识别认证。")
-                .setOnConfirmClickListener(view1 -> {
-                    //跳转人脸识别界面，type为0表示注册
-                    startActivity(new Intent(this, FaceActivity.class)
-                            .putExtra("type", 0)
-                            .putExtra("userId", userInfo.getUserId())
-                            .putExtra("resource", "register"));
-                    finish();
-                })
-                .setOnCancleClickListener(view1 -> {
-                    Toast.makeText(getApplicationContext(), "添加新用户成功", Toast.LENGTH_SHORT);
-                    startActivity(new Intent(this, MainActivity.class));
-                    finish();
-                })
-                .build()
-                .shown();
-
+        mUserInfo = userInfo;
+        //当人脸识别验证成功才能保存信息
+        faceRegister();
     }
 
     @Override
     public void editUser(UserEntity userEntity) {
         UserDao.get(getApplicationContext()).updateUser(mUserInfo);
         finish();
+    }
+
+    private void faceRegister(){
+        CommonAlertDialog.Builder(this)
+                .setTitle("人脸识别认证")
+                .setMessage("为了更方便快捷的使用本设备，需要您进行人脸识别认证。")
+                .setOnConfirmClickListener(view1 -> {
+                    //跳转人脸识别界面，type为0表示注册
+                    startActivityForResult(new Intent(this, TestActivity.class)
+                            .putExtra("type", 0)
+                            .putExtra("userId", mUserInfo.getUserId())
+                            .putExtra("resource", "register"),100);
+                })
+                .setOnCancleClickListener(view1 -> {
+                })
+                .build()
+                .shown();
     }
 
     public void toRegister(View view) {
@@ -167,10 +169,23 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         mUserInfo.setUserWeight(infoWeight.getText().toString());
         mUserInfo.setUserStature(infoStature.getText().toString());
 
-        if ("register".equals(type))
+        if ("register".equals(type)) {
+            if(null != mUserInfo.getUserId() && !TextUtils.isEmpty(mUserInfo.getUserId())){
+                faceRegister();
+                return;
+            }
             presenter.register(mUserInfo);
-        else
+        }else
             presenter.editUser(mUserInfo);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 100) {
+            UserDao.get(getApplicationContext()).insertUser(mUserInfo);
+            UserDao.get(getApplicationContext()).setCurrentUser(mUserInfo);
+            startActivity(new Intent(this,MainActivity.class));
+        }
     }
 }
