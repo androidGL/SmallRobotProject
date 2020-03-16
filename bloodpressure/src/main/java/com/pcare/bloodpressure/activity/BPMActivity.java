@@ -74,6 +74,7 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
     private TextView mBatteryLevelView;//电池
     private BPMEntity mBPMEntity;//血压实体类
     private TextView userNameText; //用户姓名
+    private TextView bPressType;
 
     private void setGUI() {
         mSystolicView = findViewById(R.id.systolic);
@@ -87,6 +88,7 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
         mBatteryLevelView = findViewById(R.id.battery);
         userNameText = findViewById(R.id.user_name);
         userNameText.setText(UserDao.get(getApplicationContext()).getCurrentUser().getUserName());
+        bPressType = findViewById(R.id.bpress_type);
     }
 
     @Override
@@ -264,6 +266,17 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
         mBPMEntity.setBpmId(UserDao.getCurrentUserId() + "-" + CommonUtil.getDateStr(calendar.getTime()));
         mBPMEntity.setUnit(getString(R.string.bpm_unit_mmhg));
         insertToNet(true);
+
+
+        if(Double.parseDouble(systolicS) > 140){
+            bPressType.setText("偏高");
+            bPressType.setTextColor(getColor(R.color.yellow));
+        }
+        if(Double.parseDouble(systolicS) > 150){
+            bPressType.setText("过高");
+            bPressType.setTextColor(getColor(R.color.red));
+        }
+
 
     }
 

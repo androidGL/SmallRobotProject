@@ -46,7 +46,6 @@
     </string-array>
     <string name="gls_location_title">采样部位</string>
     <string-array name="gls_location">
-        <item>保留</item>
 		<item>指尖静脉血</item>
 		<item>Alternate Site Test (AST)</item>
 		<item>耳垂</item>

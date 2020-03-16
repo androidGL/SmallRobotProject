@@ -9,6 +9,7 @@ import com.pcare.common.entity.DaoSession;
 import com.pcare.common.entity.GlucoseEntity;
 import com.pcare.common.entity.GlucoseEntityDao;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -134,6 +135,16 @@ public class GluTableController {
     public List<GlucoseEntity> searchByUserId(String userId){
         List<GlucoseEntity> glucoseEntities = (List<GlucoseEntity>) glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.UserId.eq(userId)).list();
         return glucoseEntities;
+    }
+    /**
+     * 按条件查询数据
+     */
+    public List<GlucoseEntity> searchByUserId(String userId, Date startDate, Date endDate){
+        List<GlucoseEntity> bpmEntities = (List<GlucoseEntity>) glucoseEntityDao.queryBuilder().where(glucoseEntityDao.queryBuilder()
+                .and(GlucoseEntityDao.Properties.UserId.eq(userId),
+                        GlucoseEntityDao.Properties.TimeDate.ge(startDate),
+                        GlucoseEntityDao.Properties.TimeDate.between(startDate,endDate))).list();
+        return bpmEntities;
     }
 
     /**

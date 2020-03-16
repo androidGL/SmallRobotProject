@@ -25,8 +25,9 @@ public abstract class BaseActivity<P extends IPresenter> extends Activity implem
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //强制横屏显示
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //强制横屏显示,若将横屏反方向则是 SCREEN_ORIENTATION_LANDSCAPE
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+
         setContentView(getLayoutId());
         ARouter.getInstance().inject(this);
         initView();

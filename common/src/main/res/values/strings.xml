@@ -19,8 +19,8 @@
     <string name="action_disconnecting">断开连接中…</string>
 
     <string name="battery">%d%%</string>
-    <string name="not_available">n/a</string>
-    <string name="not_available_value">" - "</string>
+    <string name="not_available">0</string>
+    <string name="not_available_value">" 0 "</string>
     <string name="no_ble">Device doesn\'t have BLE support!</string>
     <string name="no_apps">No profiles found.</string>
     <string name="not_supported">The device does not have required services.</string>

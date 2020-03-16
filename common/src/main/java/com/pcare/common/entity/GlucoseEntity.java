@@ -21,7 +21,6 @@
  */
 package com.pcare.common.entity;
 
-import androidx.annotation.Nullable;
 
 import org.greenrobot.greendao.annotation.Entity;
 

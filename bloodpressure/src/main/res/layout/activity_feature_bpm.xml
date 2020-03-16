@@ -1,11 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/head_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height">
+        android:layout_height="@dimen/title_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/title"
@@ -21,8 +25,8 @@
             android:id="@+id/bpm_history"
             android:layout_width="@dimen/title_right_png"
             android:layout_height="@dimen/title_right_png"
-            android:onClick="toBPMHistory"
             android:layout_alignParentRight="true"
+            android:onClick="toBPMHistory"
             android:paddingRight="10dp"
             android:src="@mipmap/history" />
 
@@ -33,77 +37,138 @@
             android:padding="10dp"
             android:src="@mipmap/back" />
     </RelativeLayout>
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:id="@+id/left_view"
+        android:layout_width="0dp"
+        android:background="@color/main_gray_color"
+        android:layout_height="430dp"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:padding="8dp"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/right_view"
+        app:layout_constraintTop_toBottomOf="@id/head_view">
+        <include
+            android:id="@+id/view_current_user"
+            layout="@layout/view_current_user" />
         <TextView
-            android:id="@+id/battery"
-            android:layout_width="90dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/feature_horizontal_margin"
-            android:layout_marginTop="@dimen/feature_device_name_margin_top"
-            android:background="@drawable/battery"
-            android:gravity="center"
-            android:text="@string/not_available"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@color/text_color"
-            android:textSize="12sp" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/device_name"
-            android:layout_width="wrap_content"
+            android:textSize="@dimen/title_size"
+            android:text="操作步骤"/>
+        <TextView
+            android:id="@+id/desc_view"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="@dimen/feature_device_name_margin_top"
-            android:ellipsize="end"
-            android:freezesText="true"
-            android:maxLines="1"
-            android:text="@string/bpm_default_name"
-            android:textAllCaps="true"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-        <Button
-            android:id="@+id/action_connect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="20dp"
-            android:onClick="onConnectClicked"
-            android:text="@string/action_connect" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="1,佩戴好配套血压仪绑带 \n2,打开配套血压仪开关
+            \n3,点击机器人屏幕中的“连接”按钮 \n4,在测量结果区域即可显示实时测量结果" />
 
+        <LinearLayout
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_gray"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/desc_view">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="血压仪信息"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/title_size" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="血压仪电量："
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/small_size" />
+
+                <TextView
+                    android:id="@+id/battery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/not_available"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/small_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="血压仪名称："
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/small_size" />
+
+                <TextView
+                    android:id="@+id/device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bpm_default_name"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/small_size" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/action_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="onConnectClicked"
+                android:text="@string/action_connect" />
+
+        </LinearLayout>
     </LinearLayout>
-    <include
-        layout="@layout/view_current_user"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/feature_horizontal_margin"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="请您打开血压仪开关并连接设备...（描述语句）" />
+
+    <!--血压相关数据采集-->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/feature_horizontal_margin"
-        android:layout_marginRight="@dimen/feature_horizontal_margin"
-        android:orientation="vertical">
+        android:id="@+id/right_view"
+        android:layout_width="0dp"
+        android:layout_height="480dp"
+        android:layout_margin="10dp"
+        android:padding="8dp"
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_weight="1"
+        android:background="@color/table_bpm"
+        app:layout_constraintStart_toEndOf="@id/left_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/head_view">
 
         <androidx.appcompat.widget.AppCompatTextView
-            style="@style/Widget.ListTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/main_text_size"
-            android:padding="8dp"
-            android:text="@string/bpm_section_bp_header" />
+            android:text="测量结果"
+            android:textSize="@dimen/title_size" />
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/table_bpm"
-            android:padding="@dimen/feature_section_padding">
+            >
 
             <TableRow
                 android:layout_width="match_parent"
@@ -114,8 +179,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:textSize="@dimen/small_size"
-                    android:text="@string/bpm_systolic" />
+                    android:text="@string/bpm_systolic"
+                    android:textSize="@dimen/small_size" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/systolic"
@@ -143,9 +208,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textSize="@dimen/small_size"
                     android:gravity="center_vertical"
-                    android:text="@string/bpm_diastolic" />
+                    android:text="@string/bpm_diastolic"
+                    android:textSize="@dimen/small_size" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/diastolic"
@@ -173,9 +238,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textSize="@dimen/small_size"
                     android:gravity="center_vertical"
-                    android:text="@string/bpm_mean_ap" />
+                    android:text="@string/bpm_mean_ap"
+                    android:textSize="@dimen/small_size" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/mean_ap"
@@ -193,133 +258,168 @@
                     android:freezesText="true"
                     android:gravity="bottom" />
             </TableRow>
-        </TableLayout>
-    </LinearLayout>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/feature_vertical_margin_top"
-        android:layout_marginLeft="@dimen/feature_horizontal_margin"
-        android:layout_marginRight="@dimen/feature_horizontal_margin"
-        android:background="@color/table_bpm"
-        android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/bpm_pulse"
+                    android:textSize="@dimen/small_size" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/Widget.ListTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="@dimen/main_text_size"
-            android:text="@string/bpm_section_pulse_header" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/pulse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:freezesText="true"
+                    android:gravity="right"
+                    android:text="@string/not_available_value"
+                    android:textSize="36sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/feature_section_padding">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:textSize="@dimen/main_text_size"
+                    android:text="@string/bpm_unit_bpm" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="@dimen/small_size"
                 android:gravity="center_vertical"
-                android:text="@string/bpm_pulse" />
+                android:text="@string/bpm_section_timestamp_header"
+                android:textSize="@dimen/small_size" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/pulse"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:freezesText="true"
-                android:gravity="right"
-                android:text="@string/not_available_value"
-                android:textSize="36sp" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="45dp"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:text="@string/bpm_unit_bpm" />
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/feature_vertical_margin_top"
-        android:layout_marginLeft="@dimen/feature_horizontal_margin"
-        android:layout_marginRight="@dimen/feature_horizontal_margin"
-        android:background="@color/table_bpm"
-        android:orientation="vertical">
-
-        <TextView
-            style="@style/Widget.ListTitle"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:freezesText="true"
+                    android:padding="8dp"
+                    android:text="@string/not_available"
+                    android:textSize="22sp" />
+            </TableRow>
+        </TableLayout>
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/main_text_size"
-            android:padding="8dp"
-            android:text="@string/bpm_section_timestamp_header" />
-
+            android:layout_height="1px"
+            android:background="@color/line_grey"/>
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="血压类型"
+            android:textSize="@dimen/title_size" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:freezesText="true"
-            android:padding="8dp"
-            android:text="@string/not_available"
-            android:textSize="22sp" />
+            android:layout_marginTop="10dp"
+            android:text="高压正常范围为120-140"
+            android:textSize="@dimen/small_size" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:freezesText="true"
+            android:layout_marginTop="10dp"
+            android:text="低压正常范围为80-90"
+            android:textSize="@dimen/small_size" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:freezesText="true"
+                android:layout_marginTop="10dp"
+                android:text="您的血压  "
+                android:textSize="@dimen/small_size"
+                />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/bpress_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:freezesText="true"
+                android:layout_marginTop="10dp"
+                android:text="正常"
+                android:textStyle="bold"
+                android:textColor="@color/green"
+                android:textSize="@dimen/title_size"
+                />
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="20dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal">
+        android:layout_margin="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
         <EditText
             android:id="@+id/t_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="月"
             android:inputType="number"
-            android:padding="5dp"/>
+            android:padding="5dp" />
+
         <EditText
             android:id="@+id/t_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="日"
             android:inputType="number"
-            android:padding="5dp"/>
+            android:padding="5dp" />
+
         <EditText
             android:id="@+id/t_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
             android:hint="小时"
-            android:padding="5dp"/>
+            android:inputType="number"
+            android:padding="5dp" />
+
         <EditText
             android:id="@+id/t_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="分钟"
             android:inputType="number"
-            android:padding="5dp"/>
+            android:padding="5dp" />
+
         <EditText
             android:id="@+id/t_systolic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="高压如：123.0"
             android:inputType="numberDecimal"
-            android:padding="5dp"/>
+            android:padding="5dp" />
+
         <EditText
             android:id="@+id/t_diastolic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="低压如：88.3"
             android:inputType="numberDecimal"
-            android:padding="5dp"/>
+            android:padding="5dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -329,4 +429,4 @@
             android:text="接口测试" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

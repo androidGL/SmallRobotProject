@@ -19,6 +19,7 @@ import com.pcare.common.base.IPresenter;
 import com.pcare.common.entity.UserEntityDao;
 import com.pcare.common.table.UserDao;
 import com.pcare.common.util.APPConstant;
+import com.pcare.common.view.CommonAlertDialog;
 import com.pcare.rebot.R;
 import com.pcare.rebot.activity.web.IndexActivity;
 import com.zy.mocknet.Main;
@@ -52,8 +53,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toInquiryPage(View view) {
-        if(!isLogin()){
-            Toast.makeText(getApplicationContext(),"请先登录",Toast.LENGTH_SHORT).show();
+        if (!isLogin()) {
+            Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
             return;
         }
         startActivity(new Intent(MainActivity.this, IndexActivity.class));
@@ -61,8 +62,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toECGPage(View view) {
-        if(!isLogin()){
-            Toast.makeText(getApplicationContext(),"请先登录",Toast.LENGTH_SHORT).show();
+        if (!isLogin()) {
+            Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = getPackageManager().getLaunchIntentForPackage(APPConstant.INQUIRY);
@@ -71,35 +72,50 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         }
     }
+
     public void toPLUPage(View view) {
-        if(!isLogin()){
-            Toast.makeText(getApplicationContext(),"请先登录",Toast.LENGTH_SHORT).show();
+        if (!isLogin()) {
+            Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
             return;
         }
-        ARouter.getInstance().build("/glu/main")
-                .withString("key1","血糖检测")
-                .navigation();
+        CommonAlertDialog.Builder(this)
+                .setMessage("您是否空腹测量")
+                .setOnConfirmClickListener(view1 -> {
+                    ARouter.getInstance().build("/glu/main")
+                            .withString("key1", "血糖检测")
+                            .withString("emptiness","1")
+                            .navigation();
+
+                })
+                .setOnCancleClickListener(view2 -> {
+                    ARouter.getInstance().build("/glu/main")
+                            .withString("key1", "血糖检测")
+                            .withString("emptiness","0")
+                            .navigation();
+
+                }).setConfirmText("是").setCancelText("否").build().shown();
+
     }
 
     public void toBPPage(View view) {
-        if(!isLogin()){
-            Toast.makeText(getApplicationContext(),"请先登录",Toast.LENGTH_SHORT).show();
+        if (!isLogin()) {
+            Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
             return;
         }
         ARouter.getInstance().build("/bp/main")
-                .withString("key1","血压检测")
+                .withString("key1", "血压检测")
                 .navigation();
     }
 
-    private boolean isLogin(){
+    private boolean isLogin() {
         return null != UserDao.getCurrentUserId() && !TextUtils.isEmpty(UserDao.getCurrentUserId());
     }
 
     public void exchangeUser(View view) {
         //跳转到人脸识别的界面
-        startActivity(new Intent(this,FaceActivity.class)
+        startActivity(new Intent(this, FaceActivity.class)
                 .putExtra("type", 1)
-                .putExtra("resource","login"));
+                .putExtra("resource", "login"));
     }
 
     public void clickMenu(View view) {
@@ -107,8 +123,9 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toSettingPage(View view) {
-        startActivity(new Intent(MainActivity.this,SettingActivity.class));
+        startActivity(new Intent(MainActivity.this, SettingActivity.class));
     }
+
     public void toRegisterPage(View view) {
         startActivity(new Intent(this, RegisterActivity.class));
     }

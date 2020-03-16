@@ -48,6 +48,7 @@ import com.pcare.common.oem.battery.LoggableBleManager;
 import com.pcare.common.table.BPMTableController;
 import com.pcare.common.table.GluTableController;
 import com.pcare.common.table.UserDao;
+import com.pcare.common.util.CommonUtil;
 import com.pcare.common.view.CommonAlertDialog;
 
 import java.util.ArrayList;
@@ -62,12 +63,14 @@ import io.reactivex.schedulers.Schedulers;
 @Route(path = "/glu/main")
 public class GlucoseActivity extends BleProfileExpandableListActivity implements BatteryManagerCallbacks {
 
-    private GlucoseRecycleAdapter recycleAdapter;
     private GlucoseManager mGlucoseManager;
     private TextView mBatteryLevelView;
     private RelativeLayout gluBatteryView;
-    private RecyclerView mRecyclerView;
-    private List<GlucoseEntity> glucoseEntityList = new ArrayList<>();
+
+    private TextView gluNum;
+    private TextView timeView;
+    private TextView locationView;
+    private TextView gluType;
 
     @Override
     protected void initView() {
@@ -76,16 +79,15 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
             finish();
         mBatteryLevelView = findViewById(R.id.battery);
         gluBatteryView = findViewById(R.id.glu_battery);
-        mRecyclerView = findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getSelfActivity()));
+        gluNum = findViewById(R.id.glu_num);
+        timeView = findViewById(R.id.timestamp);
+        locationView = findViewById(R.id.location);
+        gluType = findViewById(R.id.glu_type);
     }
 
     @Override
     public void start() {
         super.start();
-        glucoseEntityList = GluTableController.getInstance(getSelfActivity()).searchAll();
-        recycleAdapter = new GlucoseRecycleAdapter(getSelfActivity(), glucoseEntityList);
-        mRecyclerView.setAdapter(recycleAdapter);
         testHistory();
     }
 
@@ -108,8 +110,13 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
                     @Override
                     public void onSuccess(NetResponse value) {
                         if(value.getStatus() == 1 && isSave) {
-                            glucoseEntityList.add(entity);
-                            recycleAdapter.notifyDataSetChanged();
+
+                            gluNum.setText(getString(R.string.gls_value,
+                                    Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f));
+                            timeView.setText(CommonUtil.getDateStr(entity.getTimeDate()));
+                            locationView.setText(getResources().getStringArray(R.array.gls_location)[entity.getSampleLocation()]);
+//                            glucoseEntityList.add(entity);
+//                            recycleAdapter.notifyDataSetChanged();
                             GluTableController.getInstance(getApplicationContext()).insertOrReplace(entity);
                         }
                     }
@@ -117,6 +124,8 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        //TODO 当后台好了后应删除
+                        GluTableController.getInstance(getApplicationContext()).insertOrReplace(entity);
                     }
                 });
     }
@@ -198,21 +207,25 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
         entity.setSampleType(0);
         entity.setSampleLocation(0);
         entity.setStatus( 0);
+        entity.setGluId(System.currentTimeMillis());
         entity.setUserId(UserDao.getCurrentUserId());
         insertToNet(entity,true);
-    }
-
-    public void deleteAll(View view) {
-        CommonAlertDialog.Builder(getSelfActivity())
-                .setMessage("确认清空记录？")
-                .setOnConfirmClickListener(view1 -> {
-                    GluTableController.getInstance(getSelfActivity()).clear();
-                    glucoseEntityList.clear();
-                    recycleAdapter.notifyDataSetChanged();
-                }).build().shown();
+        gluNum.setText(getString(R.string.gls_value,
+                Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f));
+        timeView.setText(CommonUtil.getDateStr(entity.getTimeDate()));
+        locationView.setText(getResources().getStringArray(R.array.gls_location)[entity.getSampleLocation()]);
+        if(Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f > 6){
+            gluType.setText("偏高");
+            gluType.setTextColor(getColor(R.color.yellow));
+        }
+        if(Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f > 7){
+            gluType.setText("过高");
+            gluType.setTextColor(getColor(R.color.red));
+        }
     }
 
     public void toTrendChartActivity(View view) {
-        startActivity(new Intent(GlucoseActivity.this,GluTrendChartActivity.class));
+        startActivity(new Intent(GlucoseActivity.this,GlucoseHistoryActivity.class));
+//        startActivity(new Intent(GlucoseActivity.this,GluTrendChartActivity.class));
     }
 }

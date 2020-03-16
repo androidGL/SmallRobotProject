@@ -12,6 +12,7 @@
         <!--血糖-->
         <activity android:name=".GlucoseActivity" />
         <activity android:name=".GluTrendChartActivity" />
+        <activity android:name=".GlucoseHistoryActivity" />
     </application>
 
 
