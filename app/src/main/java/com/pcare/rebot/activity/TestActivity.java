@@ -442,29 +442,29 @@ public class TestActivity extends BaseActivity {
     }
 
     private void testGetBPMList() {
-        JSONObject object = new JSONObject();
-        try {
-            object.putOpt("userId", UserDao.getCurrentUserId());
-            RetrofitHelper.getInstance()
-                    .getRetrofit()
-                    .create(Api.class)
-                    .getBPMList("query", object)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.newThread())
-                    .subscribeWith(new DisposableSingleObserver<NetResponse>() {
-                        @Override
-                        public void onSuccess(NetResponse value) {
-                            LogUtil.i(value.toString());
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-                    });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        JSONObject object = new JSONObject();
+//        try {
+//            object.putOpt("userId", UserDao.getCurrentUserId());
+//            RetrofitHelper.getInstance()
+//                    .getRetrofit()
+//                    .create(Api.class)
+//                    .getBPMList("query", object)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(Schedulers.newThread())
+//                    .subscribeWith(new DisposableSingleObserver<NetResponse>() {
+//                        @Override
+//                        public void onSuccess(NetResponse value) {
+//                            LogUtil.i(value.toString());
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//
+//                        }
+//                    });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
     }
 

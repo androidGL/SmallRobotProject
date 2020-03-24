@@ -63,6 +63,16 @@ public abstract class BasePresenter<V extends IView> implements IPresenter  {
         }
         return mDisposables.add(disposable);
     }
+
+    /**
+     * 移除任务
+     * @param disposable
+     * @return
+     */
+    protected boolean removeDisposable(Disposable disposable) {
+
+        return mDisposables.remove(disposable);
+    }
     /**
      * @param d 判断d是否为空或者dispose
      * @return true:一次任务未开始或者已结束

@@ -109,7 +109,7 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
 
                     @Override
                     public void onSuccess(NetResponse value) {
-                        if(value.getStatus() == 1 && isSave) {
+                        if(value.getStatus() == 0 && isSave) {
 
                             gluNum.setText(getString(R.string.gls_value,
                                     Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f));

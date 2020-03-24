@@ -5,6 +5,7 @@ import com.pcare.common.entity.NetResponse;
 import com.pcare.common.entity.UserEntity;
 
 import io.reactivex.observers.DisposableSingleObserver;
+import okhttp3.ResponseBody;
 
 /**
  * @Author: gl
@@ -14,14 +15,15 @@ import io.reactivex.observers.DisposableSingleObserver;
 public interface RegisterContract {
     interface Model{
         void register(UserEntity userInfo, DisposableSingleObserver<NetResponse<UserEntity>> observer);
-        void editUser(UserEntity userInfo, DisposableSingleObserver<NetResponse<UserEntity>> observer);
+        void verifiedName(String userName, DisposableSingleObserver<NetResponse<ResponseBody>> observer);
     }
     interface View extends IView{
+        void setUserId(String id);
         void saveUser(UserEntity userInfo);
-        void editUser(UserEntity userEntity);
+        void verifiedName(boolean visible);
     }
     interface Presenter{
         void register(UserEntity u);
-        void editUser(UserEntity u);
+        void verifiedName(String userName);
     }
 }

@@ -22,10 +22,14 @@ public class BPMEntity {
     private String unit;  //血压单位
     private String pulseData; //脉搏
     private Date timeData;//时间
-    @Generated(hash = 2030758059)
+    private int result;//用户结果类型，正常，偏高，偏低等
+    private int sport;
+    private int emptiness;
+    private String robotId;
+    @Generated(hash = 1921063807)
     public BPMEntity(String userId, String bpmId, String systolicData,
             String diastolicData, String meanAPData, String unit, String pulseData,
-            Date timeData) {
+            Date timeData, int result, int sport, int emptiness, String robotId) {
         this.userId = userId;
         this.bpmId = bpmId;
         this.systolicData = systolicData;
@@ -34,6 +38,10 @@ public class BPMEntity {
         this.unit = unit;
         this.pulseData = pulseData;
         this.timeData = timeData;
+        this.result = result;
+        this.sport = sport;
+        this.emptiness = emptiness;
+        this.robotId = robotId;
     }
     @Generated(hash = 549838386)
     public BPMEntity() {
@@ -89,6 +97,38 @@ public class BPMEntity {
 
     private String getStatus(){
         return "1";
+    }
+
+    public int getResult() {
+        return result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
+    }
+
+    public int getSport() {
+        return sport;
+    }
+
+    public void setSport(int sport) {
+        this.sport = sport;
+    }
+
+    public int getEmptiness() {
+        return emptiness;
+    }
+
+    public void setEmptiness(int emptiness) {
+        this.emptiness = emptiness;
+    }
+
+    public String getRobotId() {
+        return robotId;
+    }
+
+    public void setRobotId(String robotId) {
+        this.robotId = robotId;
     }
 
     @Override

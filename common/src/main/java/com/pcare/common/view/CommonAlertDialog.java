@@ -18,12 +18,12 @@ import com.pcare.common.R;
  * @Description: 实现一个通用的Dialog
  */
 public class CommonAlertDialog extends Dialog {
-    private final String TITLE;
-    private final String MESSAGE;
-    private final String CONFIRMTEXT;
-    private final String CANCLETEXT;
-    private final OnCancleClickListener onCancleClickListener;
-    private final OnConfirmClickListener onConfirmClickListener;
+    private final String TITLE;//题目
+    private final String MESSAGE;//信息
+    private final String CONFIRMTEXT;//确认文字
+    private final String CANCLETEXT;//取消文字
+    private final OnCancleClickListener onCancleClickListener;//取消的点击事件
+    private final OnConfirmClickListener onConfirmClickListener;//确认的点击事件
 
     public interface OnConfirmClickListener{
         void onClick(View view);
@@ -32,6 +32,7 @@ public class CommonAlertDialog extends Dialog {
         void onClick(View view);
     }
 
+    //构造方法
     private CommonAlertDialog(@NonNull Context context, String TITLE, String MESSAGE, String CONFIRMTEXT, String CANCLETEXT,
                              OnCancleClickListener onCancleClickListener, OnConfirmClickListener onConfirmClickListener) {
         super(context,R.style.AlertDialogUtil);
@@ -87,6 +88,7 @@ public class CommonAlertDialog extends Dialog {
         show();
         return this;
     }
+    //创建Builder类
     public static class Builder{
         private String mTitle;
         private String mMessage;
@@ -128,6 +130,7 @@ public class CommonAlertDialog extends Dialog {
             this.mOnCancleClickListener = mOnCancelClickListener;
             return this;
         }
+        //build时返回dialog对象
         public CommonAlertDialog build(){
             return new CommonAlertDialog(mContext,mTitle,mMessage,mConfirmText,mCancelText,
                     mOnCancleClickListener,mOnConfirmClickListener);

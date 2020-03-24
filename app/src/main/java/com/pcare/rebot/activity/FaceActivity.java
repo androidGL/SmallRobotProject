@@ -19,7 +19,7 @@ public class FaceActivity extends BaseActivity {
 
     private TextureView textureView;
     private FaceUtil faceUtil;
-    private int type;
+    private int type;//0表示人脸注册，1表示人脸登陆
 
 
     @Override

@@ -2,6 +2,7 @@ package com.pcare.common.util;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,7 +15,7 @@ import androidx.core.content.ContextCompat;
 /**
  * @Author: gl
  * @CreateDate: 2019/10/23
- * @Description:
+ * @Description: 权限获取
  */
 public class PermissionHelper {
     public static final int  RC_PERMISSION_REQUEST = 9222;
@@ -26,6 +27,22 @@ public class PermissionHelper {
         return ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
+    public static boolean hasReadPhoneStatePermission(Activity activity) {
+        return ContextCompat.checkSelfPermission(activity,
+                Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    public static void requestAllPermission(Activity context){
+        String permissions[] =  new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+        };
+        ActivityCompat.requestPermissions(context,permissions,RC_PERMISSION_REQUEST);
+    }
+
     public static void requestCameraPermission(Activity activity, boolean requestWritePermission) {
 
         boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(activity,

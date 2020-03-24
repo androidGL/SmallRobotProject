@@ -6,9 +6,13 @@ import com.pcare.common.net.Api;
 import com.pcare.common.net.RetrofitHelper;
 import com.pcare.rebot.contract.RegisterContract;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import okhttp3.ResponseBody;
 
 /**
  * @Author: gl
@@ -23,20 +27,27 @@ public class RegisterModel implements RegisterContract.Model {
         RetrofitHelper.getInstance()
                 .getRetrofit()
                 .create(Api.class)
-                .register(userInfo,"register")
+                .register(userInfo)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribeWith(observer);
     }
 
+
     @Override
-    public void editUser(UserEntity userInfo, DisposableSingleObserver<NetResponse<UserEntity>> observer) {
-        RetrofitHelper.getInstance()
-                .getRetrofit()
-                .create(Api.class)
-                .register(userInfo,"register")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribeWith(observer);
+    public void verifiedName(String userName, DisposableSingleObserver<NetResponse<ResponseBody>> observer) {
+        JSONObject object = new JSONObject();
+        try {
+            object.putOpt("name",userName);
+            RetrofitHelper.getInstance()
+                    .getRetrofit()
+                    .create(Api.class)
+                    .varifyUserName(object)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.newThread())
+                    .subscribeWith(observer);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

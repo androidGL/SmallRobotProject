@@ -1,64 +1,51 @@
 package com.pcare.common.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import com.pcare.common.R;
+import com.pcare.common.util.LogUtil;
 
 /**
  * @Author: gl
  * @CreateDate: 2019/11/12
  * @Description: 自定义选择框
  */
-public class ScreenCheckBox extends CheckBox {
+public class ScreenCheckBox extends RadioButton implements CompoundButton.OnCheckedChangeListener {
     public ScreenCheckBox(Context context) {
-        super(context);
-        setTextStyle();
-        setOnCheckChangeListener();
+        this(context, (String) null);
     }
     public ScreenCheckBox(Context context,String text) {
         super(context);
         setTextStyle();
-        setOnCheckChangeListener();
+        setOnCheckedChangeListener(this);
         if(null != text)
             setText(text);
     }
 
     public ScreenCheckBox(Context context, AttributeSet attrs) {
         super(context, attrs);
-//        inflate(context, R.layout.view_checkbox, null);
         setTextStyle();
-        setOnCheckChangeListener();
+        setOnCheckedChangeListener(this);
 
     }
 
-    private void setOnCheckChangeListener(){
-        this.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    setText("√"+getText());
-                    buttonView.setTextColor(Color.parseColor("#d52c34"));
-                }else if(getText().toString().contains("√")){
-                    setText(getText().subSequence(1,getText().length()));
-                    setTextColor(Color.parseColor("#000000"));
-                }
-            }
-        });
+    @Override
+    public void toggle() {
+        setChecked(!isChecked());
     }
+
     private void setTextStyle() {
+        setButtonDrawable(null);
         setBackgroundResource(R.drawable.bg_checkbox);
         setButtonTintMode(PorterDuff.Mode.CLEAR);
         setGravity(TEXT_ALIGNMENT_CENTER);
         setPadding(20,10,20,10);
+        setClickable(true);
         if(isChecked()){
             setText("√" + getText());
             setTextColor(Color.parseColor("#d52c34"));
@@ -69,5 +56,16 @@ public class ScreenCheckBox extends CheckBox {
             return getText().toString().substring(1);
         }
         return getText().toString();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(isChecked){
+            setText("√"+getText());
+            buttonView.setTextColor(Color.parseColor("#d52c34"));
+        }else if(getText().toString().contains("√")){
+            setText(getText().subSequence(1,getText().length()));
+            setTextColor(Color.parseColor("#000000"));
+        }
     }
 }

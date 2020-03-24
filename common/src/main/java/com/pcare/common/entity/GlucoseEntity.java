@@ -36,9 +36,14 @@ public class GlucoseEntity {
 	private int sequenceNumber;//序列号
 	private Date timeDate;//时间
 	private String glucoseConcentration;//血糖值，默认0
+	private String unit;//单位
 	private int sampleType;//测量类型，默认0
 	private int sampleLocation;//测量位置，默认0
 	private int status = 1;//状态码，默认0
+	private int result;
+	private int sport;
+	private int emptiness;
+	private String robotId;
 
 	public GlucoseEntity(String userId, int sequenceNumber, Date timeDate, String glucoseConcentration, int sampleType, int sampleLocation, int status) {
 		this.userId = userId;
@@ -50,17 +55,22 @@ public class GlucoseEntity {
 		this.status = status;
 	}
 
-	@Generated(hash = 651072775)
-	public GlucoseEntity(Long gluId, String userId, int sequenceNumber, Date timeDate, String glucoseConcentration, int sampleType, int sampleLocation,
-			int status) {
+	@Generated(hash = 865773718)
+	public GlucoseEntity(Long gluId, String userId, int sequenceNumber, Date timeDate, String glucoseConcentration, String unit, int sampleType,
+			int sampleLocation, int status, int result, int sport, int emptiness, String robotId) {
 		this.gluId = gluId;
 		this.userId = userId;
 		this.sequenceNumber = sequenceNumber;
 		this.timeDate = timeDate;
 		this.glucoseConcentration = glucoseConcentration;
+		this.unit = unit;
 		this.sampleType = sampleType;
 		this.sampleLocation = sampleLocation;
 		this.status = status;
+		this.result = result;
+		this.sport = sport;
+		this.emptiness = emptiness;
+		this.robotId = robotId;
 	}
 
 	@Generated(hash = 1590621335)
@@ -158,4 +168,43 @@ public class GlucoseEntity {
 		this.status = status;
 	}
 
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public int getResult() {
+		return result;
+	}
+
+	public void setResult(int result) {
+		this.result = result;
+	}
+
+	public int getSport() {
+		return sport;
+	}
+
+	public void setSport(int sport) {
+		this.sport = sport;
+	}
+
+	public int getEmptiness() {
+		return emptiness;
+	}
+
+	public void setEmptiness(int emptiness) {
+		this.emptiness = emptiness;
+	}
+
+	public String getRobotId() {
+		return robotId;
+	}
+
+	public void setRobotId(String robotId) {
+		this.robotId = robotId;
+	}
 }

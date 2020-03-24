@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="register_et_width">180dp</dimen>
+    <dimen name="register_item_height">46dp</dimen>
+</resources>

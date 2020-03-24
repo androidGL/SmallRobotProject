@@ -7,6 +7,7 @@
     <string name="register5">请选择您的体重:</string>
     <string name="register6">请选择您的健康状况:</string>
     <string name="register7">请填写您的昵称:</string>
+    <string name="register8">请设置您的用户名:</string>
     <string name="starttip">检测到您还未注册用户，建议您去注册个人信息，以便于福娃的诊断结果更准确</string>
     <string name="to_register">我是新用户>>></string>
     <string name="registe8">选填</string>
@@ -24,5 +25,10 @@
         <item>姥爷</item>
         <item>姥姥</item>
         <item>自定义</item>
+    </array>
+    <array name="history">
+        <item>高血压</item>
+        <item>高血糖</item>
+        <item>心脏病</item>
     </array>
 </resources>

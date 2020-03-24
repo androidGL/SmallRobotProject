@@ -76,7 +76,7 @@ public class UserListActivity extends BaseActivity<UserListPresenter> implements
 
                     });
                     ((ItemHolder) holder).editImg.setOnClickListener(v -> {
-                        Intent intent = new Intent(UserListActivity.this,RegisterActivity.class);
+                        Intent intent = new Intent(UserListActivity.this,EditUserActivity.class);
                         intent.putExtra("userId",userInfoList.get(position).getUserId());
                         startActivity(intent);
                     });

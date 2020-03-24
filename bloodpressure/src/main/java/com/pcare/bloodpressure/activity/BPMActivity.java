@@ -290,7 +290,7 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
 
                     @Override
                     public void onSuccess(NetResponse value) {
-                        if(value.getStatus() == 1 && isSave) {
+                        if(value.getStatus() == 0 && isSave) {
                             BPMTableController.getInstance(getApplicationContext()).insert(mBPMEntity);
                         }
                     }

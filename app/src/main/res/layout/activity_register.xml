@@ -116,18 +116,21 @@
             <!--android:id="@+id/checkgroup"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"/>-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_grey"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="@dimen/register_item_height"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/register_et_width"
                     android:layout_height="wrap_content"
-                    android:text="@string/register7"
+                    android:text="@string/register8"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/main_text_size" />
 
@@ -138,21 +141,60 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_edittext"
+                    android:hint="用户名一旦设置将无法修改"
+                    android:padding="5dp"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/very_small_size" />
+                <TextView
+                    android:id="@+id/view_infoname_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red"
+                    android:visibility="gone"
+                    android:textSize="@dimen/very_small_size"
+                    android:text="用户名已被占用！"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_grey"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/register_item_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/register_et_width"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register7"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/main_text_size" />
+
+                <EditText
+                    android:id="@+id/info_nick_name"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/bg_edittext"
                     android:hint="请设置一个昵称"
                     android:padding="5dp"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/very_small_size" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_grey"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="@dimen/register_item_height"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/register_et_width"
                     android:layout_height="wrap_content"
                     android:text="@string/register2"
                     android:textColor="@color/text_color"
@@ -177,22 +219,19 @@
                     android:textColor="@color/title_text"
                     android:textSize="@dimen/very_small_size" />
             </LinearLayout>
-            <!--<DatePicker-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:calendarViewShown="false"-->
-            <!--android:datePickerMode="spinner"></DatePicker>-->
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_grey"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="@dimen/register_item_height"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/register_et_width"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="@string/register3"
@@ -222,16 +261,18 @@
                     android:paddingBottom="5dp"
                     android:text="女" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_grey"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="@dimen/register_item_height"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/register_et_width"
                     android:layout_height="wrap_content"
                     android:text="@string/register4"
                     android:textColor="@color/text_color"
@@ -245,20 +286,23 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/registe8"
+                    android:inputType="number"
                     android:padding="5dp"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/very_small_size" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_grey"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="@dimen/register_item_height"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/register_et_width"
                     android:layout_height="wrap_content"
                     android:text="@string/register5"
                     android:textColor="@color/text_color"
@@ -272,11 +316,15 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/registe8"
+                    android:inputType="number"
                     android:padding="5dp"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/very_small_size" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/line_grey"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -286,49 +334,15 @@
                 android:textSize="@dimen/main_text_size" />
 
             <com.pcare.common.view.CheckBoxGroup
+                android:id="@+id/view_history_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.pcare.common.view.ScreenCheckBox
-                    android:id="@+id/healthy1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@null"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="5dp"
-                    android:text="高血压" />
-
-                <com.pcare.common.view.ScreenCheckBox
-                    android:id="@+id/healthy2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:button="@null"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="5dp"
-                    android:text="高血糖" />
-
-                <com.pcare.common.view.ScreenCheckBox
-                    android:id="@+id/healthy3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:button="@null"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="5dp"
-                    android:text="心脏病" />
-            </com.pcare.common.view.CheckBoxGroup>
+                android:orientation="horizontal"/>
 
             <EditText
+                android:id="@+id/healthy4"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
@@ -339,9 +353,6 @@
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/very_small_size" />
         </LinearLayout>
-
-
-
     </ScrollView>
 
 

@@ -35,15 +35,19 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.MainActivity"
             android:launchMode="singleTask">
-
-        </activity>
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".StartActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".StartActivity" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.UserListActivity" />
@@ -52,6 +56,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".activity.web.IndexActivity" />
         <activity android:name=".activity.web.WebViewActivity" />
+        <activity android:name=".activity.EditUserActivity" />
     </application>
 
 </manifest>

@@ -113,8 +113,8 @@ public class BPMTrendChartActivity extends BaseActivity {
         UserEntity user = UserDao.get(getSelfActivity()).getCurrentUser();
         userName.setText("姓名：" + user.getUserName());
         userAge.setText("年龄：" + (0 == user.getUserBirthYear() ? "无" : (Calendar.getInstance().get(Calendar.YEAR) - user.getUserBirthYear())));
-        userStature.setText("身高：" + (TextUtils.isEmpty(user.getUserStature()) ? "无" : user.getUserStature()));
-        userWeight.setText("体重：" + (TextUtils.isEmpty(user.getUserWeight()) ? "无" : user.getUserWeight()));
+        userStature.setText("身高：" + user.getUserStature());
+        userWeight.setText("体重：" +  user.getUserWeight());
         super.initData();
     }
 

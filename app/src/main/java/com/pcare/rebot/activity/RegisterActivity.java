@@ -1,8 +1,9 @@
 package com.pcare.rebot.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,15 +12,15 @@ import android.widget.Toast;
 import com.pcare.common.base.BaseActivity;
 import com.pcare.common.entity.UserEntity;
 import com.pcare.common.table.UserDao;
+import com.pcare.common.util.CommonUtil;
 import com.pcare.common.util.LogUtil;
+import com.pcare.common.view.CheckBoxGroup;
 import com.pcare.common.view.CommonAlertDialog;
 import com.pcare.common.view.ScreenCheckBox;
 import com.pcare.common.view.YearPickerDialog;
 import com.pcare.rebot.R;
 import com.pcare.rebot.contract.RegisterContract;
 import com.pcare.rebot.presenter.RegisterPresenter;
-
-import java.io.Serializable;
 
 
 /**
@@ -31,14 +32,15 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     private TextView yearView;
     private ScreenCheckBox male, female;
-    private EditText infoName, infoStature, infoWeight;
-    private TextView infoTypeName;
-    private TextView titleView;
+    private EditText infoNameView, infoNickNameView, infoStatureView, infoWeightView, healthyView4;
+    private TextView infoTypeNameView;
     private UserEntity mUserInfo;
     private int selectYear;
     private int userType;
     private String userTypeName;
-    private String type = "register";//界面展示类型,register:注册；editUser:修改用户信息
+    private String infoHistory;
+    private CheckBoxGroup historyCheckboxView;
+    private String[] history;
 
     @Override
     public int getLayoutId() {
@@ -56,41 +58,52 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         yearView = findViewById(R.id.info_year);
         male = findViewById(R.id.checkbox_male);
         female = findViewById(R.id.checkbox_female);
-        infoName = findViewById(R.id.info_name);
-        infoStature = findViewById(R.id.info_stature);
-        infoWeight = findViewById(R.id.info_weight);
-        infoTypeName = findViewById(R.id.info_type_name);
-        titleView = findViewById(R.id.title);
+        infoTypeNameView = findViewById(R.id.info_type_name);
+        infoNameView = findViewById(R.id.info_name);
+        infoNameView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s))
+                    presenter.verifiedName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        infoNickNameView = findViewById(R.id.info_nick_name);
+        infoStatureView = findViewById(R.id.info_stature);
+        infoWeightView = findViewById(R.id.info_weight);
+        infoWeightView = findViewById(R.id.info_weight);
+        healthyView4 = findViewById(R.id.healthy4);
+        historyCheckboxView = findViewById(R.id.view_history_checkbox);
+        history = getResources().getStringArray(R.array.history);
+        for (String name : history) {
+            historyCheckboxView.addView(new ScreenCheckBox(this, name));
+        }
+
     }
 
     @Override
     public void start() {
         super.start();
         mUserInfo = new UserEntity();
-        if (getIntent().hasExtra("userId")) {
-            type = "editUser";
-            titleView.setText("修改用户信息");
-            mUserInfo = UserDao.get(getApplicationContext()).getUserById(getIntent().getStringExtra("userId"));
-            setViews(mUserInfo);
-        }
 
-    }
-
-    private void setViews(UserEntity user) {
-        yearView.setText(String.valueOf(user.getUserBirthYear()));
-        infoName.setText(user.getUserName());
-        setUserType(user.getUserType());
-        infoTypeName.setText(userTypeName);
     }
 
     @SuppressWarnings("ResourceType")
     public void selectYear(View view) {
-        YearPickerDialog yearDialog = new YearPickerDialog(getSelfActivity(), 0);
-        yearDialog.setButton(Dialog.BUTTON_POSITIVE, "选好了", (dialog, which) -> {
-            selectYear = yearDialog.getYear();
-            yearView.setText(selectYear + "年");
-        });
-        yearDialog.show();
+        YearPickerDialog.Builder(this)
+                .setOnConfirmClickListener(currentYear -> {
+                    selectYear = currentYear;
+                    yearView.setText(selectYear + "年");
+                })
+                .build()
+                .shown();
     }
 
     private void setUserType(int type) {
@@ -121,7 +134,19 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     public void selectID(View view) {
         setUserType(Integer.parseInt(view.getTag().toString()));
-        infoTypeName.setText(userTypeName);
+        infoTypeNameView.setText(userTypeName);
+    }
+
+    @Override
+    public void setUserId(String id) {
+        //TODO 拿到了userId
+        LogUtil.i("id: " + id);
+        if (!TextUtils.isEmpty(id)) {
+            startActivity(new Intent(this, FaceActivity.class)
+                    .putExtra("type", 0)
+                    .putExtra("userId", id));
+        }
+
     }
 
     @Override
@@ -131,13 +156,13 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         faceRegister();
     }
 
+
     @Override
-    public void editUser(UserEntity userEntity) {
-        UserDao.get(getApplicationContext()).updateUser(mUserInfo);
-        finish();
+    public void verifiedName(boolean visible) {
+        findViewById(R.id.view_infoname_tip).setVisibility(visible ? View.GONE : View.VISIBLE);
     }
 
-    private void faceRegister(){
+    private void faceRegister() {
         CommonAlertDialog.Builder(this)
                 .setTitle("人脸识别认证")
                 .setMessage("为了更方便快捷的使用本设备，需要您进行人脸识别认证。")
@@ -146,7 +171,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
                     startActivityForResult(new Intent(this, TestActivity.class)
                             .putExtra("type", 0)
                             .putExtra("userId", mUserInfo.getUserId())
-                            .putExtra("resource", "register"),100);
+                            .putExtra("resource", "register"), 100);
                 })
                 .setOnCancleClickListener(view1 -> {
                 })
@@ -159,33 +184,54 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
             Toast.makeText(getApplicationContext(), "请您选择身份类型", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(infoName.getText().toString())) {
-            Toast.makeText(getApplicationContext(), "请您设置昵称", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(infoNameView.getText().toString()) || TextUtils.isEmpty(infoNickNameView.getText().toString())) {
+            Toast.makeText(getApplicationContext(), "请您完善用户名和昵称", Toast.LENGTH_SHORT).show();
             return;
         }
-        mUserInfo.setUserName(infoName.getText().toString());
-        mUserInfo.setUserType(userType);
-        mUserInfo.setUserBirthYear(selectYear);
-        mUserInfo.setUserWeight(infoWeight.getText().toString());
-        mUserInfo.setUserStature(infoStature.getText().toString());
-
-        if ("register".equals(type)) {
-            if(null != mUserInfo.getUserId() && !TextUtils.isEmpty(mUserInfo.getUserId())){
-                faceRegister();
-                return;
+        if (findViewById(R.id.view_infoname_tip).getVisibility() == View.VISIBLE) {
+            Toast.makeText(getApplicationContext(), "请您重新设置用户名", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        infoHistory = "";
+        for (int i = 0; i < historyCheckboxView.getChildCount(); i++) {
+            ScreenCheckBox checkBox = (ScreenCheckBox) historyCheckboxView.getChildAt(i);
+            if (checkBox.isChecked()) {
+                infoHistory += checkBox.getTextString() + ",";
             }
-            presenter.register(mUserInfo);
-        }else
-            presenter.editUser(mUserInfo);
+        }
+        if (!TextUtils.isEmpty(infoHistory)) {
+            infoHistory = infoHistory.substring(0, infoHistory.length() - 1);
+        }
+        mUserInfo.setUserName(infoNameView.getText().toString());
+        mUserInfo.setNickName(infoNickNameView.getText().toString());
+        mUserInfo.setPassword("123456");
+        mUserInfo.setUserType(userType);
+        if (male.isChecked())
+            mUserInfo.setUserGender(0);
+        else
+            mUserInfo.setUserGender(1);
+        mUserInfo.setUserBirthYear(selectYear);
+        mUserInfo.setUserWeight(Integer.parseInt(infoWeightView.getText().toString()));
+        mUserInfo.setUserStature(Integer.parseInt(infoStatureView.getText().toString()));
+        mUserInfo.setUserRobotId(CommonUtil.getUUID(getApplicationContext()));
+        mUserInfo.setUserHistoty(infoHistory);
+
+        LogUtil.i(CommonUtil.entityToJson(mUserInfo));
+        if (null != mUserInfo.getUserId() && !TextUtils.isEmpty(mUserInfo.getUserId())) {
+            faceRegister();
+            return;
+        }
+        presenter.register(mUserInfo);
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 100) {
+        if (requestCode == 100) {
             UserDao.get(getApplicationContext()).insertUser(mUserInfo);
             UserDao.get(getApplicationContext()).setCurrentUser(mUserInfo);
-            startActivity(new Intent(this,MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 }

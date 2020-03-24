@@ -1,10 +1,7 @@
 package com.pcare.rebot.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,17 +13,16 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.pcare.common.base.BaseActivity;
 import com.pcare.common.base.IPresenter;
-import com.pcare.common.entity.UserEntityDao;
 import com.pcare.common.table.UserDao;
 import com.pcare.common.util.APPConstant;
+import com.pcare.common.util.PermissionHelper;
 import com.pcare.common.view.CommonAlertDialog;
 import com.pcare.rebot.R;
 import com.pcare.rebot.activity.web.IndexActivity;
-import com.zy.mocknet.Main;
 
 @Route(path = "app/main")
 public class MainActivity extends BaseActivity {
-    private TextView currentUserView;
+    private TextView currentUserView,exchangeView,emptyView;
     private DrawerLayout drawerLayout;
 
     @Override
@@ -42,21 +38,34 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
-        currentUserView = findViewById(R.id.current_user);
+        //申请权限
+        PermissionHelper.requestAllPermission(this);
+        currentUserView = findViewById(R.id.view_current_user);
+        exchangeView = findViewById(R.id.view_exchange);
+        emptyView = findViewById(R.id.view_empty_user);
         drawerLayout = findViewById(R.id.main_drawer);
     }
 
     @Override
     protected void initResumeData() {
         super.initResumeData();
-        currentUserView.setText(UserDao.get(getApplicationContext()).getCurrentUser().getUserName());
+        if(isLogin()) {
+            currentUserView.setVisibility(View.VISIBLE);
+            exchangeView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+            currentUserView.setText(UserDao.get(getApplicationContext()).getCurrentUser().getUserName());
+        }else {
+            currentUserView.setVisibility(View.GONE);
+            exchangeView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
     }
 
     public void toInquiryPage(View view) {
-        if (!isLogin()) {
-            Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (!isLogin()) {
+//            Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         startActivity(new Intent(MainActivity.this, IndexActivity.class));
 
     }

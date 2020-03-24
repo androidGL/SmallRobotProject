@@ -356,7 +356,7 @@ public class FaceUtil {
             RetrofitHelper.getInstance()
                     .getRetrofit()
                     .create(Api.class)
-                    .detectFace(userId, imgBase64, ugroup)
+                    .detectFace(userId, imgBase64)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.newThread())
                     .subscribeWith(new DisposableSingleObserver<NetResponse>() {
@@ -366,7 +366,7 @@ public class FaceUtil {
                             if (!isOpen)
                                 return;
                             Log.i(TAG, "Response:" + response.toString());
-                            if (response.getStatus() == 1) {
+                            if (response.getStatus() == 0) {
                                 timerHandler.removeCallbacks(timerRunnable);
                                 faceDetectListener.detectSucess();
                                 isOpen = false;
@@ -383,7 +383,7 @@ public class FaceUtil {
             RetrofitHelper.getInstance()
                     .getRetrofit()
                     .create(Api.class)
-                    .compareFace(imgBase64, ugroup)
+                    .compareFace(imgBase64)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.newThread())
                     .subscribeWith(new DisposableSingleObserver<NetResponse>() {
@@ -396,7 +396,7 @@ public class FaceUtil {
                             try {
                                 String result = response.toString();
                                 Log.i(TAG, "Response:" + result);
-                                if (response.getStatus() == 1) {
+                                if (response.getStatus() == 0) {
                                     jsonObject = new JSONObject(response.getData().toString());
                                     timerHandler.removeCallbacks(timerRunnable);
                                     faceCompareListener.compareSucess(jsonObject.optString("userId"));

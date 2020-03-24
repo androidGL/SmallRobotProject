@@ -11,6 +11,9 @@ import com.pcare.common.util.LogUtil;
 import com.pcare.rebot.contract.RegisterContract;
 import com.pcare.rebot.model.RegisterModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import io.reactivex.SingleObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 
@@ -30,15 +33,14 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
 
     @Override
     public void register(UserEntity u) {
-        u.setUserId("user"+ (UserTableController.getInstance(getView().getSelfActivity()).searchAll().size()+1));
-        DisposableSingleObserver observer =new DisposableSingleObserver<NetResponse<UserEntity>>(){
+        DisposableSingleObserver observer = new DisposableSingleObserver<NetResponse>() {
 
             @Override
-            public void onSuccess(NetResponse<UserEntity> value) {
-                if(value.getStatus() == 1) {
-                    getView().saveUser(value.getData());
-                }else {
-                    Toast.makeText(getView().getSelfActivity(),value.getMsg(),Toast.LENGTH_SHORT).show();
+            public void onSuccess(NetResponse value) {
+                if (value.getStatus() == 0) {
+                    getView().setUserId(value.getMsg());
+                } else {
+                    Toast.makeText(getView().getSelfActivity(), value.getMsg(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -49,30 +51,29 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
             }
         };
         addDisposable(observer);
-        model.register(u,observer);
+        model.register(u, observer);
     }
 
+
     @Override
-    public void editUser(UserEntity u) {
-//        getView().editUser(u);
+    public void verifiedName(String userName) {
         DisposableSingleObserver observer = new DisposableSingleObserver<NetResponse>() {
             @Override
             public void onSuccess(NetResponse response) {
-                if(response.getStatus() == 1) {
-                    getView().editUser((UserEntity) response.getData());
-                }else {
-
-                }
-
+                if (0 == response.getStatus())
+                    getView().verifiedName(true);
+                else
+                    getView().verifiedName(false);
             }
 
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                getView().verifiedName(false);
             }
         };
         addDisposable(observer);
-        model.editUser(u,observer);
-
+        model.verifiedName(userName, observer);
     }
+
 }
