@@ -49,7 +49,11 @@ import com.pcare.common.table.BPMTableController;
 import com.pcare.common.table.GluTableController;
 import com.pcare.common.table.UserDao;
 import com.pcare.common.util.CommonUtil;
+import com.pcare.common.util.LogUtil;
 import com.pcare.common.view.CommonAlertDialog;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,6 +75,7 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
     private TextView timeView;
     private TextView locationView;
     private TextView gluType;
+    private TextView normalGlu;
 
     @Override
     protected void initView() {
@@ -83,6 +88,7 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
         timeView = findViewById(R.id.timestamp);
         locationView = findViewById(R.id.location);
         gluType = findViewById(R.id.glu_type);
+        normalGlu = findViewById(R.id.normal_glu);
     }
 
     @Override
@@ -109,23 +115,45 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
 
                     @Override
                     public void onSuccess(NetResponse value) {
+                        LogUtil.i(value.toString());
                         if(value.getStatus() == 0 && isSave) {
+                            try {
+                                JSONObject object = new JSONObject(value.getData().toString());
+                                gluNum.setText(getString(R.string.gls_value,
+                                        entity.getGlucose()));
+                                timeView.setText(entity.getCheck_time());
+                                locationView.setText(getResources().getStringArray(R.array.gls_location)[entity.getSample_location()]);
+                                entity.setResult(Integer.parseInt(object.optString("result")));
+                                normalGlu.setText("血糖正常范围为"+object.optString("normal"));
+                                switch (entity.getResult()){
+                                    case -2:
+                                        gluType.setText("过低");
+                                        break;
+                                    case -1:
+                                        gluType.setText("较低");
+                                        break;
+                                    case 0:
+                                        gluType.setText("正常");
+                                        break;
+                                    case 1:
+                                        gluType.setText("较高");
+                                        break;
+                                    case 2:
+                                        gluType.setText("过高");
+                                        break;
 
-                            gluNum.setText(getString(R.string.gls_value,
-                                    Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f));
-                            timeView.setText(CommonUtil.getDateStr(entity.getTimeDate()));
-                            locationView.setText(getResources().getStringArray(R.array.gls_location)[entity.getSampleLocation()]);
-//                            glucoseEntityList.add(entity);
-//                            recycleAdapter.notifyDataSetChanged();
-                            GluTableController.getInstance(getApplicationContext()).insertOrReplace(entity);
+                                }
+                                GluTableController.getInstance(getApplicationContext()).insertOrReplace(entity);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        //TODO 当后台好了后应删除
-                        GluTableController.getInstance(getApplicationContext()).insertOrReplace(entity);
                     }
                 });
     }
@@ -178,7 +206,7 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
     public void testHistory() {
         List<GlucoseEntity> list = GluTableController.getInstance(getSelfActivity()).searchAll();
         for (GlucoseEntity entity : list) {
-            Log.i("Table-----", entity.getGluId() + entity.toString());
+            Log.i("Table-----", entity.getId() + entity.toString());
         }
     }
 
@@ -201,31 +229,20 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
         GlucoseEntity entity = new GlucoseEntity();
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, Integer.valueOf(monthS), Integer.valueOf(dayS),Integer.valueOf(hourS),Integer.valueOf(minS));
-        entity.setTimeDate(calendar.getTime());
-        entity.setSequenceNumber(0);
-        entity.setGlucoseConcentration(valueS);
-        entity.setSampleType(0);
-        entity.setSampleLocation(0);
+        entity.setCheck_time(CommonUtil.getDateStr(calendar.getTime()));
+        entity.setSequence_num("0");
+        entity.setGlucose(Double.parseDouble(valueS));
+        entity.setSample_type(0);
+        entity.setSample_location(0);
         entity.setStatus( 0);
-        entity.setGluId(System.currentTimeMillis());
-        entity.setUserId(UserDao.getCurrentUserId());
+        entity.setUnit("mmol/l");
+        entity.setRobot_id(CommonUtil.getUUID(getApplicationContext()));
+        entity.setId(CommonUtil.getRandomId());
+        entity.setUser_id(UserDao.getCurrentUserId());
         insertToNet(entity,true);
-        gluNum.setText(getString(R.string.gls_value,
-                Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f));
-        timeView.setText(CommonUtil.getDateStr(entity.getTimeDate()));
-        locationView.setText(getResources().getStringArray(R.array.gls_location)[entity.getSampleLocation()]);
-        if(Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f > 6){
-            gluType.setText("偏高");
-            gluType.setTextColor(getColor(R.color.yellow));
-        }
-        if(Float.parseFloat(entity.getGlucoseConcentration()) * 1000.0f > 7){
-            gluType.setText("过高");
-            gluType.setTextColor(getColor(R.color.red));
-        }
     }
 
     public void toTrendChartActivity(View view) {
         startActivity(new Intent(GlucoseActivity.this,GlucoseHistoryActivity.class));
-//        startActivity(new Intent(GlucoseActivity.this,GluTrendChartActivity.class));
     }
 }

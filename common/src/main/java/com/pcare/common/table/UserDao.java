@@ -43,21 +43,35 @@ public class UserDao {
         return currentUserId;
     }
 
-    public boolean setCurrentUser(UserEntity user){
-        if(null != getCurrentUser())
+    public static String getCurrentUserId(Context context) {
+        if (null != UserDao.currentUserId)
+            return UserDao.currentUserId;
+        UserEntity entity = UserTableController.getInstance(context).getCurrentUser();
+        if (null != entity) {
+            UserDao.currentUserId = entity.getUser_id();
+
+        }
+        return UserDao.currentUserId;
+    }
+
+    public boolean setCurrentUser(UserEntity user) {
+        if (null != getCurrentUser())
             updateUser(getCurrentUser().setCurrentUser(false));
         updateUser(user.setCurrentUser(true));
-        setCurrentUserId(user.getUserId());
+        setCurrentUserId(user.getUser_id());
         return true;
     }
-    public boolean setCurrentUser(String userId){
-        if (TextUtils.isEmpty(userId)||null == getUserById(userId))
+
+    public boolean setCurrentUser(String userId) {
+        if (TextUtils.isEmpty(userId) || null == getUserById(userId))
             return false;
         return setCurrentUser(getUserById(userId));
     }
+
     public UserEntity getCurrentUser() {
         return UserTableController.getInstance(context).getCurrentUser();
     }
+
     public UserEntity getUserById(String userId) {
         return UserTableController.getInstance(context).getUser(userId);
     }
@@ -80,6 +94,7 @@ public class UserDao {
     public void insertUser(UserEntity userInfo) {
         UserTableController.getInstance(context).insert(userInfo);
     }
+
     public void updateUser(UserEntity userInfo) {
         UserTableController.getInstance(context).insertOrReplace(userInfo);
     }

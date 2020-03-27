@@ -38,7 +38,15 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
             @Override
             public void onSuccess(NetResponse value) {
                 if (value.getStatus() == 0) {
-                    getView().setUserId(value.getMsg());
+                    JSONObject data;
+                    try {
+                        LogUtil.i("data:"+value.getData().toString());
+                        data = new JSONObject(value.getData().toString());
+                        getView().setUserId(data.optString("user_id"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getView().getSelfActivity(), value.getMsg(), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getView().getSelfActivity(), value.getMsg(), Toast.LENGTH_SHORT).show();
                 }

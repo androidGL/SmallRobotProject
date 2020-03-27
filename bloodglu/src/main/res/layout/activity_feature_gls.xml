@@ -272,6 +272,7 @@
         android:text="血糖类型"
         android:textSize="@dimen/title_size" />
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/normal_glu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:freezesText="true"

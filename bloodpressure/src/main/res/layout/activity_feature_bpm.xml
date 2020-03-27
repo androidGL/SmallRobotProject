@@ -322,6 +322,7 @@
             android:text="血压类型"
             android:textSize="@dimen/title_size" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/normal_systolic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:freezesText="true"
@@ -329,6 +330,7 @@
             android:text="高压正常范围为120-140"
             android:textSize="@dimen/small_size" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/normal_diastolic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:freezesText="true"

@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -27,13 +29,22 @@ public class CommonUtil {
 
     public static String getDateStr(Date date, String format) {
         if (null == date) {
-            return "暂无数据";
+            return "";
         }
         if (format == null || format.isEmpty()) {
-            format = "yyyy-MM-dd  HH:mm:ss";
+            format = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         return formatter.format(date);
+    }
+    public static String getDateStr(String date, String format) {
+        if (null == date) {
+            return "";
+        }
+        if (format == null || format.isEmpty()) {
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        return getDateStr(getDate(date,format),format);
     }
 
     public static String getDateStr(Date date) {
@@ -45,7 +56,7 @@ public class CommonUtil {
             return null;
         }
         if (format == null || format.isEmpty()) {
-            format = "yyyy-MM-dd";
+            format = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         try {
@@ -69,6 +80,10 @@ public class CommonUtil {
 
     }
 
+    public static String getRandomId(){
+        return UUID.randomUUID().toString();
+    }
+
     /**
      * 实体类转json
      * @param o
@@ -77,7 +92,7 @@ public class CommonUtil {
     public static String entityToJson(Object o,String[] keys){
         if(null != keys && keys.length>0){
             try {
-                JSONObject object = new JSONObject(new Gson().toJson(o));
+                JSONObject object = new JSONObject(new GsonBuilder().disableHtmlEscaping().create().toJson(o));
                 for (String k : keys){
                     if (object.has(k))
                         object.remove(k);
@@ -88,7 +103,7 @@ public class CommonUtil {
                 return null;
             }
         }else
-        return new Gson().toJson(o);
+            return new GsonBuilder().disableHtmlEscaping().create().toJson(o);
     }
     public static String entityToJson(Object o){
         return entityToJson(o,null);

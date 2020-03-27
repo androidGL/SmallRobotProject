@@ -122,7 +122,7 @@ public class GluTableController {
      * @param glucoseEntity
      */
     public void update(GlucoseEntity glucoseEntity){
-        GlucoseEntity mOldGluEntity = glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.GluId.eq(glucoseEntity.getGluId())).build().unique();//拿到之前的记录
+        GlucoseEntity mOldGluEntity = glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.Id.eq(glucoseEntity.getId())).build().unique();//拿到之前的记录
         if(mOldGluEntity !=null){
             glucoseEntityDao.update(glucoseEntity);
         }else {
@@ -133,7 +133,7 @@ public class GluTableController {
      * 按条件查询数据
      */
     public List<GlucoseEntity> searchByUserId(String userId){
-        List<GlucoseEntity> glucoseEntities = (List<GlucoseEntity>) glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.UserId.eq(userId)).list();
+        List<GlucoseEntity> glucoseEntities = (List<GlucoseEntity>) glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.User_id.eq(userId)).list();
         return glucoseEntities;
     }
     /**
@@ -141,9 +141,9 @@ public class GluTableController {
      */
     public List<GlucoseEntity> searchByUserId(String userId, Date startDate, Date endDate){
         List<GlucoseEntity> bpmEntities = (List<GlucoseEntity>) glucoseEntityDao.queryBuilder().where(glucoseEntityDao.queryBuilder()
-                .and(GlucoseEntityDao.Properties.UserId.eq(userId),
-                        GlucoseEntityDao.Properties.TimeDate.ge(startDate),
-                        GlucoseEntityDao.Properties.TimeDate.between(startDate,endDate))).list();
+                .and(GlucoseEntityDao.Properties.User_id.eq(userId),
+                        GlucoseEntityDao.Properties.Check_time.ge(startDate),
+                        GlucoseEntityDao.Properties.Check_time.between(startDate,endDate))).list();
         return bpmEntities;
     }
 
@@ -154,10 +154,10 @@ public class GluTableController {
      */
     public boolean isExistSameItem(GlucoseEntity entity){
         List<GlucoseEntity> glucoseEntities = (List<GlucoseEntity>) glucoseEntityDao.queryBuilder()
-                .where(GlucoseEntityDao.Properties.TimeDate.eq(entity.getTimeDate()))
-                .where(GlucoseEntityDao.Properties.GlucoseConcentration.eq(entity.getGlucoseConcentration())).list();
+                .where(GlucoseEntityDao.Properties.Check_time.eq(entity.getCheck_time()))
+                .where(GlucoseEntityDao.Properties.Glucose.eq(entity.getGlucose())).list();
         for(GlucoseEntity item : glucoseEntities){
-            if (null != item.getUserId() && item.getUserId().equals(entity.getUserId()))
+            if (null != item.getUser_id() && item.getUser_id().equals(entity.getUser_id()))
                 return true;
         }
         return false;
@@ -171,13 +171,13 @@ public class GluTableController {
     }
 
     public GlucoseEntity getGlu(String gluId){
-        return glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.GluId.eq(gluId)).build().unique();
+        return glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.Id.eq(gluId)).build().unique();
     }
     /**
      * 删除数据
      */
     public void deleteById(String gluId){
-        glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.GluId.eq(gluId)).buildDelete().executeDeleteWithoutDetachingEntities();
+        glucoseEntityDao.queryBuilder().where(GlucoseEntityDao.Properties.Id.eq(gluId)).buildDelete().executeDeleteWithoutDetachingEntities();
     }
     /**
      * 删除所有数据

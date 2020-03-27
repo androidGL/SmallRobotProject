@@ -21,7 +21,7 @@ import okhttp3.ResponseBody;
  */
 public class RegisterModel implements RegisterContract.Model {
     @Override
-    public void register(UserEntity userInfo, DisposableSingleObserver<NetResponse<UserEntity>> observer) {
+    public void register(UserEntity userInfo, DisposableSingleObserver<NetResponse> observer) {
         //第一个参数表示要修改哪个网络请求的BaseURL，第二个参数表示要修改成什么样的URL
 //        RetrofitUrlManager.getInstance().putDomain(Api.URL_VALUE_SECOND, Api.BASEURL2);
         RetrofitHelper.getInstance()
@@ -35,7 +35,7 @@ public class RegisterModel implements RegisterContract.Model {
 
 
     @Override
-    public void verifiedName(String userName, DisposableSingleObserver<NetResponse<ResponseBody>> observer) {
+    public void verifiedName(String userName, DisposableSingleObserver<NetResponse> observer) {
         JSONObject object = new JSONObject();
         try {
             object.putOpt("name",userName);

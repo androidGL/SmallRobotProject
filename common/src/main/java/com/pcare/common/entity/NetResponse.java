@@ -2,6 +2,8 @@ package com.pcare.common.entity;
 
 import androidx.annotation.NonNull;
 
+import com.pcare.common.util.CommonUtil;
+
 /**
  * @Author: gl
  * @CreateDate: 2019/11/18
@@ -42,6 +44,6 @@ public class NetResponse<T> {
     public String toString() {
         return "{\"status\":" + getStatus()
                 + ",\"msg\":\"" + getMsg()
-                + "\",\"data\":" + getData().toString() + "}";
+                + "\",\"data\":" + CommonUtil.entityToJson(getData())+ "}";
     }
 }

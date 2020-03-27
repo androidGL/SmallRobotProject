@@ -7,6 +7,7 @@ import com.pcare.common.util.CommonUtil;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Property;
 
 /**
  * @Author: gl
@@ -17,7 +18,7 @@ import org.greenrobot.greendao.annotation.Id;
 public class UserEntity {
     @Id(autoincrement = true)
     private Long id;
-    private String userId;//用户ID
+    private String user_id;//用户ID
     private String name;//用户名，唯一
     private String nickname;//昵称
     private String password;
@@ -29,13 +30,13 @@ public class UserEntity {
     private String robot_id;//用户使用的机器人ID号或设备号
     private String disease_history;//用户病史
     private boolean currentUser;//当前使用用户
-    @Generated(hash = 58266905)
-    public UserEntity(Long id, String userId, String name, String nickname,
+    @Generated(hash = 1920383255)
+    public UserEntity(Long id, String user_id, String name, String nickname,
             String password, int type, int gender, int birth_year, int height,
             int weight, String robot_id, String disease_history,
             boolean currentUser) {
         this.id = id;
-        this.userId = userId;
+        this.user_id = user_id;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
@@ -51,12 +52,6 @@ public class UserEntity {
     @Generated(hash = 1433178141)
     public UserEntity() {
     }
-    public String getUserId() {
-        return this.userId;
-    }
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
     public int getUserType() {
         return this.type;
     }
@@ -68,9 +63,6 @@ public class UserEntity {
     }
     public void setUserBirthYear(int userBirthYear) {
         this.birth_year = userBirthYear;
-    }
-    public int getUserGender() {
-        return this.gender;
     }
     public void setUserGender(int userGender) {
         this.gender = userGender;
@@ -93,11 +85,7 @@ public class UserEntity {
     public void setUserWeight(int userWeight) {
         this.weight = userWeight;
     }
-    public String getUserRobotId() {
-        if(TextUtils.isEmpty(this.robot_id))
-            this.robot_id = "0";
-        return this.robot_id;
-    }
+
     public void setUserRobotId(String userRobotId) {
         this.robot_id = userRobotId;
     }
@@ -117,9 +105,6 @@ public class UserEntity {
         this.nickname = nickName;
     }
 
-    public String getUserHistoty() {
-        return disease_history;
-    }
 
     public void setUserHistoty(String userHistoty) {
         this.disease_history = userHistoty;
@@ -154,7 +139,7 @@ public class UserEntity {
         return CommonUtil.entityToJson(this,new String[]{"currentUser"});
 //        return "UserEntity{" +
 //                "id=" + id +
-//                ", userId='" + userId + '\'' +
+//                ", user_id='" + user_id + '\'' +
 //                ", name='" + name + '\'' +
 //                ", nickname='" + nickname + '\'' +
 //                ", password='" + password + '\'' +
@@ -211,6 +196,8 @@ public class UserEntity {
         this.weight = weight;
     }
     public String getRobot_id() {
+        if(TextUtils.isEmpty(this.robot_id))
+            this.robot_id = "0";
         return this.robot_id;
     }
     public void setRobot_id(String robot_id) {
@@ -221,5 +208,11 @@ public class UserEntity {
     }
     public void setDisease_history(String disease_history) {
         this.disease_history = disease_history;
+    }
+    public String getUser_id() {
+        return this.user_id;
+    }
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

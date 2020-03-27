@@ -21,7 +21,8 @@ import retrofit2.http.Query;
 
 public interface Api {
 //    String BASEURL = "http://192.168.13.192:8080";//武祥成本地
-    String BASEURL = "http://192.168.2.180:8080";//服务器
+//    String BASEURL = "http://192.168.2.181:8000";//张宇阔本地
+    String BASEURL = "http://192.168.2.180:8000";//服务器
 
     //header中添加 URL_KEY，表示这个请求是需要替换BaseUrl的
     String URL_KEY = "URL_KEY";
@@ -30,7 +31,7 @@ public interface Api {
 
     //人脸识别的URL
     String URL_VALUE_FACE = "URL_VALUE_FACE";
-    String FACEURL = "http://192.168.2.181:8000/face";
+    String FACEURL = "http://192.168.2.181:8000";
 
     //问诊的URL
 
@@ -58,23 +59,23 @@ public interface Api {
     //1，判断重复
     @POST("users/is_user_unique/")
     @FormUrlEncoded
-    Single<NetResponse<ResponseBody>> varifyUserName(@Field("item") JSONObject userName);
+    Single<NetResponse> varifyUserName(@Field("item") JSONObject userName);
     //2,注册用户
     @POST("users/user_info_for_id/")
     @FormUrlEncoded
-    Single<NetResponse<UserEntity>> register(@Field("item") UserEntity userEntity);
+    Single<NetResponse> register(@Field("item") UserEntity userEntity);
     //3,修改用户
     @POST("users/modify/")
     @FormUrlEncoded
     Single<NetResponse<UserEntity>> modifyUser(@Field("item") UserEntity userEntity);
     //4，人脸注册
-    @Headers({URL_KEY+":"+URL_VALUE_FACE})
-    @POST("detect64")
+//    @Headers({URL_KEY+":"+URL_VALUE_FACE})
+    @POST("face/detect64")
     @FormUrlEncoded
     Single<NetResponse> detectFace(@Field("usr_id") String userId,@Field("image_base64") String imageBase64);
     //5，人脸识别
-    @Headers({URL_KEY+":"+URL_VALUE_FACE})
-    @POST("search64")
+//    @Headers({URL_KEY+":"+URL_VALUE_FACE})
+    @POST("face/search64")
     @FormUrlEncoded
     Single<NetResponse> compareFace(@Field("image_base64") String imageBase64);
 
@@ -83,19 +84,19 @@ public interface Api {
      * 血压相关
      */
     //1，保存血压
-    @POST("ask/bpress/")
+    @POST("asks/bpress/")
     @FormUrlEncoded
     Single<NetResponse> insertBPM(@Field("operate") String operate,@Field("item") BPMEntity entity);
     //2，查询血压
-    @POST("ask/bpress/")
+    @POST("asks/bpress/")
     @FormUrlEncoded
     Single<NetResponse> getBPMList2(@Field("operate") String operate);//operate传参query
     //3，查询血压
-    @POST("ask/bpress/")
+    @POST("asks/bpress/")
     @FormUrlEncoded
     Single<NetResponse> getBPMList(@Field("operate") String operate,@Field("item") JSONObject item);//operate传参bpress_query_user_id
     //4，删除血压
-    @POST("ask/bpress/")
+    @POST("asks/bpress/")
     @FormUrlEncoded
     Single<NetResponse> deleteBPM(@Field("operate") String operate,@Field("item") String id);//operate传参delete
 
@@ -104,19 +105,19 @@ public interface Api {
      * 血糖相关
      */
     //1,保存血糖
-    @POST("ask/glu/")
+    @POST("asks/glu/")
     @FormUrlEncoded
     Single<NetResponse> insertGLU(@Field("operate") String operate,@Field("item") GlucoseEntity entity);
     //2,查询血糖
-    @POST("ask/glu/")
+    @POST("asks/glu/")
     @FormUrlEncoded
     Single<NetResponse> getGLUList2(@Field("operate") String operate,@Field("item") JSONObject object);//operate传参query
     //3,查询血糖
-    @POST("ask/glu/")
+    @POST("asks/glu/")
     @FormUrlEncoded
     Single<NetResponse> getGLUList(@Field("operate") String operate,@Field("item") JSONObject object);//operate传参glu_query_user_id
     //4，删除血糖
-    @POST("ask/glu/")
+    @POST("asks/glu/")
     @FormUrlEncoded
     Single<NetResponse> deleteGLU(@Field("operate") String operate,@Field("item") JSONObject object);//operate传参delete
 
@@ -132,12 +133,12 @@ public interface Api {
 
     //问诊问题
     @Headers({URL_KEY+":"+URL_VALUE_QUESTION})
-    @POST("ask/")
+    @POST("asks/")
     @FormUrlEncoded
     Single<ResponseBody> getAnswer(@Field("question") String question);
 
     @Headers({URL_KEY+":"+URL_VALUE_ASK})
-    @POST("ask/")
+    @POST("asks/")
     @FormUrlEncoded
     Single<ResponseBody> ask(@Field("query") String question);
 

@@ -120,7 +120,7 @@ public class UserTableController {
      * @param userEntity
      */
     public void update(UserEntity userEntity){
-        UserEntity mOldUserEntity = getUser(userEntity.getUserId());//拿到之前的记录
+        UserEntity mOldUserEntity = getUser(userEntity.getUser_id());//拿到之前的记录
         if(mOldUserEntity !=null){
             userEntityDao.update(mOldUserEntity);
         }
@@ -159,13 +159,13 @@ public class UserTableController {
     public UserEntity getUser(String userId){
         if(null == userId)
             return null;
-        return userEntityDao.queryBuilder().where(UserEntityDao.Properties.UserId.eq(userId)).build().unique();
+        return userEntityDao.queryBuilder().where(UserEntityDao.Properties.User_id.eq(userId)).build().unique();
     }
     /**
      * 删除数据
      */
     public void deleteById(String userId){
-        userEntityDao.queryBuilder().where(UserEntityDao.Properties.UserId.eq(userId)).buildDelete().executeDeleteWithoutDetachingEntities();
+        userEntityDao.queryBuilder().where(UserEntityDao.Properties.User_id.eq(userId)).buildDelete().executeDeleteWithoutDetachingEntities();
     }
     /**
      * 删除所有数据

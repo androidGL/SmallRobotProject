@@ -121,7 +121,7 @@ public class BPMTableController {
      * @param bpmEntity
      */
     public void update(BPMEntity bpmEntity){
-        BPMEntity mOldBpmEntity = bpmEntityDao.queryBuilder().where(BPMEntityDao.Properties.BpmId.eq(bpmEntity.getBpmId())).build().unique();//拿到之前的记录
+        BPMEntity mOldBpmEntity = bpmEntityDao.queryBuilder().where(BPMEntityDao.Properties.Id.eq(bpmEntity.getId())).build().unique();//拿到之前的记录
         if(mOldBpmEntity !=null){
             bpmEntityDao.update(bpmEntity);
         }else {
@@ -132,7 +132,7 @@ public class BPMTableController {
      * 按条件查询数据
      */
     public List<BPMEntity> searchByUserId(String userId){
-        List<BPMEntity> bpmEntities = (List<BPMEntity>) bpmEntityDao.queryBuilder().where(BPMEntityDao.Properties.UserId.eq(userId)).list();
+        List<BPMEntity> bpmEntities = (List<BPMEntity>) bpmEntityDao.queryBuilder().where(BPMEntityDao.Properties.User_id.eq(userId)).list();
         return bpmEntities;
     }
     /**
@@ -140,9 +140,9 @@ public class BPMTableController {
      */
     public List<BPMEntity> searchByUserId(String userId,Date startDate,Date endDate){
         List<BPMEntity> bpmEntities = (List<BPMEntity>) bpmEntityDao.queryBuilder().where(bpmEntityDao.queryBuilder()
-                        .and(BPMEntityDao.Properties.UserId.eq(userId),
-                                BPMEntityDao.Properties.TimeData.ge(startDate),
-                                BPMEntityDao.Properties.TimeData.between(startDate,endDate))).list();
+                        .and(BPMEntityDao.Properties.User_id.eq(userId),
+                                BPMEntityDao.Properties.Check_time.ge(startDate),
+                                BPMEntityDao.Properties.Check_time.between(startDate,endDate))).list();
         return bpmEntities;
     }
     /**
@@ -154,13 +154,13 @@ public class BPMTableController {
     }
 
     public BPMEntity getBPM(String bpmId){
-        return bpmEntityDao.queryBuilder().where(BPMEntityDao.Properties.BpmId.eq(bpmId)).build().unique();
+        return bpmEntityDao.queryBuilder().where(BPMEntityDao.Properties.Id.eq(bpmId)).build().unique();
     }
     /**
      * 删除数据
      */
     public void deleteById(String bpmId){
-        bpmEntityDao.queryBuilder().where(BPMEntityDao.Properties.BpmId.eq(bpmId)).buildDelete().executeDeleteWithoutDetachingEntities();
+        bpmEntityDao.queryBuilder().where(BPMEntityDao.Properties.Id.eq(bpmId)).buildDelete().executeDeleteWithoutDetachingEntities();
     }
     /**
      * 删除所有数据

@@ -63,15 +63,15 @@ public class GluTrendChartActivity extends BaseActivity {
         Calendar calendar = Calendar.getInstance();
         List<CurveTrendChartView.Value> list3 = new ArrayList<>();
         for (GlucoseEntity entity : glucoseEntities) {
-            calendar.setTime(entity.getTimeDate());
-            list3.add(new CurveTrendChartView.Value(calendar.get(Calendar.HOUR_OF_DAY), (int) (Double.parseDouble(entity.getGlucoseConcentration()) * 10000)));
+            calendar.setTime(CommonUtil.getDate(entity.getCheck_time()));
+            list3.add(new CurveTrendChartView.Value(calendar.get(Calendar.HOUR_OF_DAY), (int) entity.getGlucose()));
         }
 
         List<CurveTrendChartView.Value> list4 = new ArrayList<>();
         for (GlucoseEntity entity : glucoseEntities) {
-            calendar.setTime(entity.getTimeDate());
-            list4.add(new CurveTrendChartView.Value(calendar.get(Calendar.HOUR_OF_DAY), (int) (Double.parseDouble(entity.getGlucoseConcentration()) * 10000) - 10));
-            avgGluNum += Double.parseDouble(entity.getGlucoseConcentration()) * 1000;
+            calendar.setTime(CommonUtil.getDate(entity.getCheck_time()));
+            list4.add(new CurveTrendChartView.Value(calendar.get(Calendar.HOUR_OF_DAY), (int) (entity.getGlucose()) - 10));
+            avgGluNum += entity.getGlucose();
         }
         curveView = curveView.Builder(getSelfActivity())
                 .setY("mmol/l", list, 10.00)
@@ -83,10 +83,10 @@ public class GluTrendChartActivity extends BaseActivity {
                 .build();
 
         avgGluNum = avgGluNum / glucoseEntities.size();
-        calendar.setTime(glucoseEntities.get(0).getTimeDate());
+        calendar.setTime(CommonUtil.getDate(glucoseEntities.get(0).getCheck_time()));
         startTime = "5";
         endTime = "20";
-        avgTimeView.setText("时间段：" + CommonUtil.getDateStr(glucoseEntities.get(0).getTimeDate(), "yyyy-MM-dd") + "  "+startTime + " 时 至 " + endTime + "时");
+        avgTimeView.setText("时间段：" + CommonUtil.getDateStr(glucoseEntities.get(0).getCheck_time(), "yyyy-MM-dd") + "  "+startTime + " 时 至 " + endTime + "时");
         avgGluView.setText("血糖平均值：" + String.format("%.2f",avgGluNum));
     }
 

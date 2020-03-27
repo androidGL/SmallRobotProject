@@ -157,6 +157,17 @@
                 android:visibility="gone"
                 android:background="@drawable/bg_edittext_normal"
                 android:text="暂无用户\n点击添加新用户"/>
+            <TextView
+                android:id="@+id/view_empty_user_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"
+                android:paddingBottom="40dp"
+                android:onClick="toLogin"
+                android:text="已有账号，去登陆"/>
+
 
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

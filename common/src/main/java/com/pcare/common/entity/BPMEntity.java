@@ -2,9 +2,13 @@ package com.pcare.common.entity;
 
 import androidx.annotation.NonNull;
 
+import com.pcare.common.util.CommonUtil;
+
 import org.greenrobot.greendao.annotation.Entity;
 
 import java.util.Date;
+import java.util.UUID;
+
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -14,89 +18,93 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class BPMEntity {
-    private String userId;//用户ID
-    private String bpmId;//血压记录ID
-    private String systolicData; //高压值
-    private String diastolicData;//低压值
-    private String meanAPData;   //平均压
+    private String user_id;//用户ID
+    private String id;//血压记录ID
+    private int systolic; //高压值
+    private int diastolic;//低压值
+    private int mean;   //平均压
     private String unit;  //血压单位
-    private String pulseData; //脉搏
-    private Date timeData;//时间
+    private int pulse; //脉搏
+    private String check_time;//时间
     private int result;//用户结果类型，正常，偏高，偏低等
-    private int sport;
-    private int emptiness;
-    private String robotId;
-    @Generated(hash = 1921063807)
-    public BPMEntity(String userId, String bpmId, String systolicData,
-            String diastolicData, String meanAPData, String unit, String pulseData,
-            Date timeData, int result, int sport, int emptiness, String robotId) {
-        this.userId = userId;
-        this.bpmId = bpmId;
-        this.systolicData = systolicData;
-        this.diastolicData = diastolicData;
-        this.meanAPData = meanAPData;
+    private int sport = 0;
+    private int emptiness = 0;
+    private String robot_id;
+    @Generated(hash = 673142445)
+    public BPMEntity(String user_id, String id, int systolic, int diastolic, int mean,
+            String unit, int pulse, String check_time, int result, int sport, int emptiness,
+            String robot_id) {
+        this.user_id = user_id;
+        this.id = id;
+        this.systolic = systolic;
+        this.diastolic = diastolic;
+        this.mean = mean;
         this.unit = unit;
-        this.pulseData = pulseData;
-        this.timeData = timeData;
+        this.pulse = pulse;
+        this.check_time = check_time;
         this.result = result;
         this.sport = sport;
         this.emptiness = emptiness;
-        this.robotId = robotId;
+        this.robot_id = robot_id;
     }
     @Generated(hash = 549838386)
     public BPMEntity() {
     }
-    public String getUserId() {
-        return this.userId;
+    public String getUser_id() {
+        return this.user_id;
     }
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
-    public String getSystolicData() {
-        return this.systolicData;
+    public String getId() {
+        return this.id;
     }
-    public void setSystolicData(String systolicData) {
-        this.systolicData = systolicData;
+    public void setId(String id) {
+        this.id = id;
     }
-    public String getDiastolicData() {
-        return this.diastolicData;
+    public int getSystolic() {
+        return this.systolic;
     }
-    public void setDiastolicData(String diastolicData) {
-        this.diastolicData = diastolicData;
+    public void setSystolic(int systolic) {
+        this.systolic = systolic;
     }
-    public String getMeanAPData() {
-        return this.meanAPData;
+    public int getDiastolic() {
+        return this.diastolic;
     }
-    public void setMeanAPData(String meanAPData) {
-        this.meanAPData = meanAPData;
+    public void setDiastolic(int diastolic) {
+        this.diastolic = diastolic;
     }
+    public int getMean() {
+        return this.mean;
+    }
+    public void setMean(int mean) {
+        this.mean = mean;
+    }
+    public int getPulse() {
+        return this.pulse;
+    }
+    public void setPulse(int pulse) {
+        this.pulse = pulse;
+    }
+    public String getCheck_time() {
+
+        return this.check_time;
+    }
+    public void setCheck_time(String check_time) {
+        this.check_time = check_time;
+    }
+    public String getRobot_id() {
+        return this.robot_id;
+    }
+    public void setRobot_id(String robot_id) {
+        this.robot_id = robot_id;
+    }
+
     public String getUnit() {
         return this.unit;
     }
     public void setUnit(String unit) {
         this.unit = unit;
-    }
-    public String getPulseData() {
-        return this.pulseData;
-    }
-    public void setPulseData(String pulseData) {
-        this.pulseData = pulseData;
-    }
-    public Date getTimeData() {
-        return this.timeData;
-    }
-    public void setTimeData(Date timeData) {
-        this.timeData = timeData;
-    }
-    public String getBpmId() {
-        return this.bpmId;
-    }
-    public void setBpmId(String bpmId) {
-        this.bpmId = bpmId;
-    }
-
-    private String getStatus(){
-        return "1";
     }
 
     public int getResult() {
@@ -123,25 +131,24 @@ public class BPMEntity {
         this.emptiness = emptiness;
     }
 
-    public String getRobotId() {
-        return robotId;
-    }
-
-    public void setRobotId(String robotId) {
-        this.robotId = robotId;
-    }
 
     @Override
     public String toString() {
-        return "{\"userId\":\"" + getUserId() +
-                "\",\"bpmId\":\"" + getBpmId() +
-                "\",\"systolicdata\":\"" + getSystolicData() +
-                "\",\"diastolicdata\":\"" + getDiastolicData() +
-                "\",\"meanAPData\":\"" + getMeanAPData() +
-                "\",\"unit\":\"" + getUnit() +
-                "\",\"pulseData\":\"" + getPulseData() +
-                "\",\"timeData\":\"" + getTimeData() +
-                "\",\"status\":\"" + getStatus() +
-                "\"}";
+        return CommonUtil.entityToJson(this);
+//        return "{\"user_id\":\"" + getUser_id() +
+//                "\",\"id\":\"" + getBpmId() +
+//                "\",\"systolic\":\"" + getSystolicData() +
+//                "\",\"diastolic\":\"" + getDiastolicData() +
+//                "\",\"mean\":\"" + getMeanAPData() +
+//                "\",\"unit\":\"" + getUnit() +
+//                "\",\"pulse\":\"" + getPulseData() +
+//                "\",\"check_time\":\"" + CommonUtil.getDateStr(getTimeData(), null) +
+//                "\",\"result\":\"" + getResult() +
+//                "\",\"robot_id\":\"" + getRobot_id() +
+//                "\",\"sport\":\"" + getSport() +
+//                "\",\"emptiness\":\"" + getEmptiness() +
+//                "\",\"status\":\"" + getStatus() +
+//                "\"}";
     }
+
 }

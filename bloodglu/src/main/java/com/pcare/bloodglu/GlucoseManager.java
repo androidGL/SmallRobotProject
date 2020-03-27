@@ -21,6 +21,7 @@ import com.pcare.common.oem.battery.BatteryManagerCallbacks;
 import com.pcare.common.table.BPMTableController;
 import com.pcare.common.table.GluTableController;
 import com.pcare.common.table.UserDao;
+import com.pcare.common.util.CommonUtil;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -106,13 +107,13 @@ public class GlucoseManager extends BatteryManager<BatteryManagerCallbacks> {
 																 @Nullable final Integer sampleLocation, @Nullable final GlucoseStatus status,
 																 final boolean contextInformationFollows) {
 							final GlucoseEntity record = new GlucoseEntity();
-							record.setSequenceNumber(sequenceNumber);
-							record.setTimeDate(time.getTime());
-							record.setGlucoseConcentration(String.valueOf(glucoseConcentration != null ? glucoseConcentration : 0));
-							record.setSampleType(type != null ? type : 0);
-							record.setSampleLocation(sampleLocation != null ? sampleLocation : 0);
+							record.setSequence_num(String.valueOf(sequenceNumber));
+							record.setCheck_time(CommonUtil.getDateStr(time.getTime()));
+							record.setGlucose(glucoseConcentration != null ? glucoseConcentration : 0);
+							record.setSample_type(type != null ? type : 0);
+							record.setSample_location(sampleLocation != null ? sampleLocation : 0);
 							record.setStatus( status != null ? status.value : 0);
-							record.setUserId(UserDao.getCurrentUserId());
+							record.setUser_id(UserDao.getCurrentUserId());
 							//如果存在新的记录，则回调
 							if(!GluTableController.getInstance(mContext).isExistSameItem(record)) {
 								Log.i("Table-----","true");

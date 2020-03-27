@@ -146,15 +146,15 @@ public class StartActivity extends BaseActivity {
         }
     }
 
-    public void getBPM() {
-        List<BPMEntity> list = BPMTableController.getInstance(getApplicationContext()).searchAll();
-        if (list.size() > 0) {
-            for (BPMEntity entity : list) {
-                Log.i("getBPM", entity.toString() + "-------------------------" + CommonUtil.getDateStr(entity.getTimeData()));
-            }
-        }
-//        BPMTableController.getInstance(getApplicationContext()).insert(mBPMEntity);
-    }
+//    public void getBPM() {
+//        List<BPMEntity> list = BPMTableController.getInstance(getApplicationContext()).searchAll();
+//        if (list.size() > 0) {
+//            for (BPMEntity entity : list) {
+//                Log.i("getBPM", entity.toString() + "-------------------------" + CommonUtil.getDateStr(entity.getCheck_time()));
+//            }
+//        }
+////        BPMTableController.getInstance(getApplicationContext()).insert(mBPMEntity);
+//    }
 
     public void test() {
         RetrofitUrlManager.getInstance().putDomain(Api.URL_VALUE_QUESTION,Api.QUESTIONURL);

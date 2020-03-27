@@ -142,9 +142,10 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         //TODO 拿到了userId
         LogUtil.i("id: " + id);
         if (!TextUtils.isEmpty(id)) {
-            startActivity(new Intent(this, FaceActivity.class)
+            mUserInfo.setUser_id(id);
+            startActivityForResult(new Intent(this, FaceActivity.class)
                     .putExtra("type", 0)
-                    .putExtra("userId", id));
+                    .putExtra("userId", id),100);
         }
 
     }
@@ -152,8 +153,6 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     @Override
     public void saveUser(UserEntity userInfo) {
         mUserInfo = userInfo;
-        //当人脸识别验证成功才能保存信息
-        faceRegister();
     }
 
 
@@ -162,22 +161,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         findViewById(R.id.view_infoname_tip).setVisibility(visible ? View.GONE : View.VISIBLE);
     }
 
-    private void faceRegister() {
-        CommonAlertDialog.Builder(this)
-                .setTitle("人脸识别认证")
-                .setMessage("为了更方便快捷的使用本设备，需要您进行人脸识别认证。")
-                .setOnConfirmClickListener(view1 -> {
-                    //跳转人脸识别界面，type为0表示注册
-                    startActivityForResult(new Intent(this, TestActivity.class)
-                            .putExtra("type", 0)
-                            .putExtra("userId", mUserInfo.getUserId())
-                            .putExtra("resource", "register"), 100);
-                })
-                .setOnCancleClickListener(view1 -> {
-                })
-                .build()
-                .shown();
-    }
+
 
     public void toRegister(View view) {
         if (TextUtils.isEmpty(userTypeName)) {
@@ -217,10 +201,6 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         mUserInfo.setUserHistoty(infoHistory);
 
         LogUtil.i(CommonUtil.entityToJson(mUserInfo));
-        if (null != mUserInfo.getUserId() && !TextUtils.isEmpty(mUserInfo.getUserId())) {
-            faceRegister();
-            return;
-        }
         presenter.register(mUserInfo);
 
     }
@@ -228,9 +208,11 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100) {
+        if (requestCode == 100 && resultCode == 200) {
+            LogUtil.i("注册成功，保存用户数据");
             UserDao.get(getApplicationContext()).insertUser(mUserInfo);
             UserDao.get(getApplicationContext()).setCurrentUser(mUserInfo);
+            LogUtil.i(CommonUtil.entityToJson(mUserInfo));
             startActivity(new Intent(this, MainActivity.class));
         }
     }

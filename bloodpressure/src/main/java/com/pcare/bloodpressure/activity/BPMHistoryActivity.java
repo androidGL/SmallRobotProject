@@ -20,13 +20,23 @@ import com.pcare.bloodpressure.R;
 import com.pcare.common.base.BaseActivity;
 import com.pcare.common.base.IPresenter;
 import com.pcare.common.entity.BPMEntity;
+import com.pcare.common.entity.NetResponse;
+import com.pcare.common.net.Api;
+import com.pcare.common.net.RetrofitHelper;
 import com.pcare.common.table.BPMTableController;
 import com.pcare.common.table.UserDao;
 import com.pcare.common.util.CommonUtil;
 import com.pcare.common.util.LogUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @Author: gl
@@ -82,29 +92,29 @@ public class BPMHistoryActivity extends BaseActivity {
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
                 if (holder instanceof ItemHolder) {
                     BPMEntity entity = bpmList.get(position);
-                    ((ItemHolder) holder).timeView.setText(CommonUtil.getDateStr(entity.getTimeData()));
-                    ((ItemHolder) holder).systolicView.setText(entity.getSystolicData() + entity.getUnit());
-                    ((ItemHolder) holder).diastolicView.setText(entity.getDiastolicData() + entity.getUnit());
-                    ((ItemHolder) holder).meanAPView.setText(entity.getMeanAPData() + entity.getUnit());
-                    ((ItemHolder) holder).pulseView.setText(entity.getPulseData() + "bpm");
-                    if (Double.parseDouble(entity.getSystolicData()) > Double.parseDouble(getResources().getString(R.string.systolic_top))
-                            || Double.parseDouble(entity.getDiastolicData()) > Double.parseDouble(getResources().getString(R.string.diastolic_top))) {
+                    ((ItemHolder) holder).timeView.setText(entity.getCheck_time());
+                    ((ItemHolder) holder).systolicView.setText(entity.getSystolic() + entity.getUnit());
+                    ((ItemHolder) holder).diastolicView.setText(entity.getDiastolic() + entity.getUnit());
+                    ((ItemHolder) holder).meanAPView.setText(entity.getMean() + entity.getUnit());
+                    ((ItemHolder) holder).pulseView.setText(entity.getPulse() + "bpm");
+                    if (entity.getSystolic() > Double.parseDouble(getResources().getString(R.string.systolic_top))
+                            || entity.getDiastolic() > Double.parseDouble(getResources().getString(R.string.diastolic_top))) {
                         ((ItemHolder) holder).typeView.setText("偏高");
                         ((ItemHolder) holder).typeView.setBackgroundResource(R.mipmap.circle_yellow);
-                    } else if (Double.parseDouble(entity.getSystolicData()) < Double.parseDouble(getResources().getString(R.string.systolic_bottom))
-                            || Double.parseDouble(entity.getDiastolicData()) < Double.parseDouble(getResources().getString(R.string.diastolic_bottom))) {
+                    } else if (entity.getSystolic() < Double.parseDouble(getResources().getString(R.string.systolic_bottom))
+                            || entity.getDiastolic() < Double.parseDouble(getResources().getString(R.string.diastolic_bottom))) {
                         ((ItemHolder) holder).typeView.setText("偏低");
                         ((ItemHolder) holder).typeView.setBackgroundResource(R.mipmap.circle_yellow);
                     } else {
                         ((ItemHolder) holder).typeView.setText("正常");
                         ((ItemHolder) holder).typeView.setBackgroundResource(R.mipmap.circle_green);
                     }
-                    if (Double.parseDouble(entity.getSystolicData()) > 150
-                            || Double.parseDouble(entity.getDiastolicData()) > 100) {
+                    if (entity.getSystolic() > 150
+                            || entity.getDiastolic() > 100) {
                         ((ItemHolder) holder).typeView.setText("过高");
                         ((ItemHolder) holder).typeView.setBackgroundResource(R.mipmap.circle_red);
-                    } else if (Double.parseDouble(entity.getSystolicData()) < 110
-                            || Double.parseDouble(entity.getDiastolicData()) < 70) {
+                    } else if (entity.getSystolic() < 110
+                            || entity.getDiastolic() < 70) {
                         ((ItemHolder) holder).typeView.setText("过低");
                         ((ItemHolder) holder).typeView.setBackgroundResource(R.mipmap.circle_red);
                     }
@@ -116,6 +126,33 @@ public class BPMHistoryActivity extends BaseActivity {
                 return bpmList.size();
             }
         });
+        getNetValueList();
+    }
+    private void getNetValueList(){
+        JSONObject object = new JSONObject();
+        try {
+            object.putOpt("user_id",UserDao.get(getApplicationContext()).getCurrentUser().getUser_id());
+            object.putOpt("query_date_begin",CommonUtil.getDateStr(startDate));
+            object.putOpt("query_date_end",CommonUtil.getDateStr(endDate));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RetrofitHelper.getInstance().getRetrofit()
+                .create(Api.class)
+                .getBPMList("bpress_query_user_id",object)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribeWith(new DisposableSingleObserver<NetResponse>() {
+                    @Override
+                    public void onSuccess(NetResponse value) {
+                        LogUtil.i("value: "+value.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     public void filterList(View v) {

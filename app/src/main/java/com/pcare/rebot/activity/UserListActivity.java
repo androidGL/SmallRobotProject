@@ -67,8 +67,8 @@ public class UserListActivity extends BaseActivity<UserListPresenter> implements
                                 .setOnConfirmClickListener(new CommonAlertDialog.OnConfirmClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        UserDao.get(getApplicationContext()).deleteUserById(userInfoList.get(position).getUserId());
-//                            presenter.deleteUser(userInfoList.get(position).getUserId());
+                                        UserDao.get(getApplicationContext()).deleteUserById(userInfoList.get(position).getUser_id());
+//                            presenter.deleteUser(userInfoList.get(position).getUser_id());
                                         userInfoList.remove(position);
                                         notifyDataSetChanged();
                                     }
@@ -77,7 +77,7 @@ public class UserListActivity extends BaseActivity<UserListPresenter> implements
                     });
                     ((ItemHolder) holder).editImg.setOnClickListener(v -> {
                         Intent intent = new Intent(UserListActivity.this,EditUserActivity.class);
-                        intent.putExtra("userId",userInfoList.get(position).getUserId());
+                        intent.putExtra("userId",userInfoList.get(position).getUser_id());
                         startActivity(intent);
                     });
 

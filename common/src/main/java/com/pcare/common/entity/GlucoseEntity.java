@@ -22,55 +22,49 @@
 package com.pcare.common.entity;
 
 
+import com.pcare.common.util.CommonUtil;
+
 import org.greenrobot.greendao.annotation.Entity;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
 @Entity
 public class GlucoseEntity {
-	@Id(autoincrement = true)
-	private Long gluId;//血糖记录ID
-	private String userId;//用户ID
-	private int sequenceNumber;//序列号
-	private Date timeDate;//时间
-	private String glucoseConcentration;//血糖值，默认0
+	private String id;//血糖记录ID
+	private String user_id;//用户ID
+	private String sequence_num;//序列号
+	private String check_time;//时间
+	private double glucose;//血糖值，默认0
 	private String unit;//单位
-	private int sampleType;//测量类型，默认0
-	private int sampleLocation;//测量位置，默认0
+	private int sample_type;//测量类型，默认0
+	private int sample_location;//测量位置，默认0
 	private int status = 1;//状态码，默认0
 	private int result;
 	private int sport;
 	private int emptiness;
-	private String robotId;
+	private String robot_id;
 
-	public GlucoseEntity(String userId, int sequenceNumber, Date timeDate, String glucoseConcentration, int sampleType, int sampleLocation, int status) {
-		this.userId = userId;
-		this.sequenceNumber = sequenceNumber;
-		this.timeDate = timeDate;
-		this.glucoseConcentration = glucoseConcentration;
-		this.sampleType = sampleType;
-		this.sampleLocation = sampleLocation;
-		this.status = status;
-	}
 
-	@Generated(hash = 865773718)
-	public GlucoseEntity(Long gluId, String userId, int sequenceNumber, Date timeDate, String glucoseConcentration, String unit, int sampleType,
-			int sampleLocation, int status, int result, int sport, int emptiness, String robotId) {
-		this.gluId = gluId;
-		this.userId = userId;
-		this.sequenceNumber = sequenceNumber;
-		this.timeDate = timeDate;
-		this.glucoseConcentration = glucoseConcentration;
+	@Generated(hash = 1174760670)
+	public GlucoseEntity(String id, String user_id, String sequence_num, String check_time, double glucose, String unit, int sample_type,
+			int sample_location, int status, int result, int sport, int emptiness, String robot_id) {
+		this.id = id;
+		this.user_id = user_id;
+		this.sequence_num = sequence_num;
+		this.check_time = check_time;
+		this.glucose = glucose;
 		this.unit = unit;
-		this.sampleType = sampleType;
-		this.sampleLocation = sampleLocation;
+		this.sample_type = sample_type;
+		this.sample_location = sample_location;
 		this.status = status;
 		this.result = result;
 		this.sport = sport;
 		this.emptiness = emptiness;
-		this.robotId = robotId;
+		this.robot_id = robot_id;
 	}
 
 	@Generated(hash = 1590621335)
@@ -83,81 +77,80 @@ public class GlucoseEntity {
 			return true;
 		}
 		if (obj instanceof GlucoseEntity) {
-			return this.getTimeDate().equals(((GlucoseEntity) obj).getTimeDate())
-					&& this.getGlucoseConcentration() .equals (((GlucoseEntity) obj).getGlucoseConcentration());
+			return this.getCheck_time().equals(((GlucoseEntity) obj).getCheck_time())
+					&& this.getGlucose()==((GlucoseEntity) obj).getGlucose();
 		}
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		return "{\"userId\":\"" + getUserId() +
-				"\",\"gluId\":\"" + getGluId() +
-				"\",\"sequenceNumber\":\"" + getSequenceNumber() +
-				"\",\"timeDate\":\"" + getTimeDate() +
-				"\",\"glucoseConcentration\":\"" + getGlucoseConcentration() +
-				"\",\"sampleType\":\"" + getSampleType() +
-				"\",\"sampleLocation\":\"" + getSampleLocation() +
-				"\",\"status\":\"" + getStatus() +
-				"\"}";
+		return CommonUtil.entityToJson(this);
+//		return "{\"user_id\":\"" + getUserId() +
+//				"\",\"id\":\"" + getGluId() +
+//				"\",\"sequence_num\":\"" + getSequenceNumber() +
+//				"\",\"check_time\":\"" + getTimeDate() +
+//				"\",\"glucose\":\"" + getGlucoseConcentration() +
+//				"\",\"sample_type\":\"" + getSampleType() +
+//				"\",\"sample_location\":\"" + getSampleLocation() +
+//				"\",\"status\":\"" + getStatus() +
+//				"\"}";
 	}
 
-	public Long getGluId() {
-		if(null == this.gluId)
-			this.gluId = 0L;
-		return this.gluId;
+	public String getId() {
+		return this.id;
 	}
 
-	public void setGluId(Long gluId) {
-		this.gluId = gluId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getUserId() {
-		return this.userId;
+	public String getUser_d() {
+		return this.user_id;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
 	}
 
-	public int getSequenceNumber() {
-		return this.sequenceNumber;
+	public String getSequence_num() {
+		return this.sequence_num;
 	}
 
-	public void setSequenceNumber(int sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
+	public void setSequence_num(String sequence_num) {
+		this.sequence_num = sequence_num;
 	}
 
-	public Date getTimeDate() {
-		return this.timeDate;
+	public String getCheck_time() {
+		return this.check_time;
 	}
 
-	public void setTimeDate(Date timeDate) {
-		this.timeDate = timeDate;
+	public void setCheck_time(String check_time) {
+		this.check_time = check_time;
 	}
 
-	public String getGlucoseConcentration() {
-		return this.glucoseConcentration;
+	public double getGlucose() {
+		return this.glucose;
 	}
 
-	public void setGlucoseConcentration(String glucoseConcentration) {
-		this.glucoseConcentration = glucoseConcentration;
+	public void setGlucose(double glucose) {
+		this.glucose = new BigDecimal(glucose * 1000.00).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
-	public int getSampleType() {
-		return this.sampleType;
+	public int getSample_type() {
+		return this.sample_type;
 	}
 
-	public void setSampleType(int sampleType) {
-		this.sampleType = sampleType;
+	public void setSample_type(int sample_type) {
+		this.sample_type = sample_type;
 	}
 
-	public int getSampleLocation() {
-		return this.sampleLocation;
+	public int getSample_location() {
+		return this.sample_location;
 	}
 
-	public void setSampleLocation(int sampleLocation) {
-		this.sampleLocation = sampleLocation;
+	public void setSample_location(int sample_location) {
+		this.sample_location = sample_location;
 	}
 
 	public int getStatus() {
@@ -200,11 +193,15 @@ public class GlucoseEntity {
 		this.emptiness = emptiness;
 	}
 
-	public String getRobotId() {
-		return robotId;
+	public String getRobot_id() {
+		return robot_id;
 	}
 
-	public void setRobotId(String robotId) {
-		this.robotId = robotId;
+	public void setRobot_id(String robot_id) {
+		this.robot_id = robot_id;
+	}
+
+	public String getUser_id() {
+		return this.user_id;
 	}
 }

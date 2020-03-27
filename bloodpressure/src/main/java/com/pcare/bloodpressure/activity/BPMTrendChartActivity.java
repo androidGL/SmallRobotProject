@@ -44,8 +44,8 @@ public class BPMTrendChartActivity extends BaseActivity {
         if (null != bpmEntities && bpmEntities.size() > 0) {
             avgSystolicNum = avgSystolicNum / bpmEntities.size();
             avgDiastolicNum = avgDiastolicNum / bpmEntities.size();
-            startTime = CommonUtil.getDateStr(bpmEntities.get(0).getTimeData(), "yyyy-MM-dd");
-            endTime = CommonUtil.getDateStr(bpmEntities.get(bpmEntities.size() - 1).getTimeData(), "yyyy-MM-dd");
+            startTime = CommonUtil.getDateStr(bpmEntities.get(0).getCheck_time(), "yyyy-MM-dd");
+            endTime = CommonUtil.getDateStr(bpmEntities.get(bpmEntities.size() - 1).getCheck_time(), "yyyy-MM-dd");
             unit = bpmEntities.get(0).getUnit();
         }
         avgTimeView.setText("时间段：" + startTime + " 至 " + endTime);
@@ -75,12 +75,12 @@ public class BPMTrendChartActivity extends BaseActivity {
         Calendar calendar = Calendar.getInstance();
         bpmEntities = BPMTableController.getInstance(getSelfActivity()).searchAll();
         for (BPMEntity entity : bpmEntities) {
-            calendar.setTime(entity.getTimeData());
+            calendar.setTime(CommonUtil.getDate(entity.getCheck_time()));
             double x = calendar.get(Calendar.DAY_OF_MONTH) + calendar.get(Calendar.HOUR_OF_DAY) / 60.0;
-            list3.add(new CurveTrendChartView.Value((int)x, (int) (Double.parseDouble(entity.getSystolicData())*100)));
-            list4.add(new CurveTrendChartView.Value((int)x, (int) (Double.parseDouble(entity.getDiastolicData())*100)));
-            avgSystolicNum += Double.parseDouble(entity.getSystolicData());
-            avgDiastolicNum += Double.parseDouble(entity.getDiastolicData());
+            list3.add(new CurveTrendChartView.Value((int)x, entity.getSystolic()*100));
+            list4.add(new CurveTrendChartView.Value((int)x, entity.getDiastolic()*100));
+            avgSystolicNum += entity.getSystolic();
+            avgDiastolicNum += entity.getDiastolic();
             Log.i("aaa", entity.toString());
         }
 

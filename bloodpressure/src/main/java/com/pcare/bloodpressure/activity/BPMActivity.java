@@ -48,6 +48,10 @@ import com.pcare.common.util.CommonUtil;
 import com.pcare.bloodpressure.manager.BPMManager;
 import com.pcare.common.util.LogUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -58,6 +62,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import no.nordicsemi.android.ble.common.profile.bp.BloodPressureMeasurementCallback;
 import no.nordicsemi.android.ble.common.profile.bp.IntermediateCuffPressureCallback;
+import okhttp3.ResponseBody;
 
 @Route(path = "/bp/main")
 public class BPMActivity extends BleProfileActivity implements BPMManagerCallbacks {
@@ -74,7 +79,7 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
     private TextView mBatteryLevelView;//电池
     private BPMEntity mBPMEntity;//血压实体类
     private TextView userNameText; //用户姓名
-    private TextView bPressType;
+    private TextView bPressType,normalDiastolic,normalSystolic;//类型，低压正常值，高压正常值
 
     private void setGUI() {
         mSystolicView = findViewById(R.id.systolic);
@@ -87,8 +92,10 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
         mTimestampView = findViewById(R.id.timestamp);
         mBatteryLevelView = findViewById(R.id.battery);
         userNameText = findViewById(R.id.user_name);
-        userNameText.setText(UserDao.get(getApplicationContext()).getCurrentUser().getUserName());
+        userNameText.setText(UserDao.get(getApplicationContext()).getCurrentUser().getNickName());
         bPressType = findViewById(R.id.bpress_type);
+        normalDiastolic = findViewById(R.id.normal_diastolic);
+        normalSystolic = findViewById(R.id.normal_systolic);
     }
 
     @Override
@@ -166,35 +173,37 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
             if (null == mBPMEntity) {
                 mBPMEntity = new BPMEntity();
             }
-            mBPMEntity.setUserId(UserDao.getCurrentUserId());
-            mBPMEntity.setSystolicData(String.valueOf(systolic));
-            mBPMEntity.setDiastolicData(String.valueOf(diastolic));
-            mBPMEntity.setMeanAPData(String.valueOf(meanArterialPressure));
+            mBPMEntity.setUser_id(UserDao.getCurrentUserId());
+            mBPMEntity.setSystolic((int) systolic);
+            mBPMEntity.setDiastolic((int)diastolic);
+            mBPMEntity.setMean((int)meanArterialPressure);
             if (pulseRate != null)
-                mBPMEntity.setPulseData(String.valueOf(pulseRate));
+                mBPMEntity.setPulse(pulseRate.intValue());
             else
-                mBPMEntity.setPulseData(getString(R.string.not_available_value));
+                mBPMEntity.setPulse(Integer.parseInt(getString(R.string.not_available_value)));
             if (calendar != null) {
-                mBPMEntity.setTimeData(calendar.getTime());
-                mBPMEntity.setBpmId(UserDao.getCurrentUserId() + "-" + calendar.getTime());
+                mBPMEntity.setCheck_time(CommonUtil.getDateStr(calendar.getTime()));
             }
             mBPMEntity.setUnit(unit == BloodPressureMeasurementCallback.UNIT_mmHg ? getString(R.string.bpm_unit_mmhg) : getString(R.string.bpm_unit_kpa));
-            mSystolicView.setText(mBPMEntity.getSystolicData());
-            mDiastolicView.setText(mBPMEntity.getDiastolicData());
-            mMeanAPView.setText(mBPMEntity.getMeanAPData());
-            mPulseView.setText(mBPMEntity.getPulseData());
-            if (mBPMEntity.getTimeData() != null)
-                mTimestampView.setText(CommonUtil.getDateStr(mBPMEntity.getTimeData()));
-            else
-                mTimestampView.setText(R.string.not_available);
-            mSystolicUnitView.setText(mBPMEntity.getUnit());
-            mDiastolicUnitView.setText(mBPMEntity.getUnit());
-            mMeanAPUnitView.setText(mBPMEntity.getUnit());
+            updateViews();
 
             Log.i(TAG, mBPMEntity.toString());
             //插入数据
             insertToNet(true);
         });
+    }
+    private void updateViews(){
+        mSystolicView.setText(String.valueOf(mBPMEntity.getSystolic()));
+        mDiastolicView.setText(String.valueOf(mBPMEntity.getDiastolic()));
+        mMeanAPView.setText(String.valueOf(mBPMEntity.getMean()));
+        mPulseView.setText(String.valueOf(mBPMEntity.getPulse()));
+        if (mBPMEntity.getCheck_time() != null)
+            mTimestampView.setText(mBPMEntity.getCheck_time());
+        else
+            mTimestampView.setText(R.string.not_available);
+        mSystolicUnitView.setText(mBPMEntity.getUnit());
+        mDiastolicUnitView.setText(mBPMEntity.getUnit());
+        mMeanAPUnitView.setText(mBPMEntity.getUnit());
     }
 
     @Override
@@ -257,26 +266,17 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
         if (null == mBPMEntity) {
             mBPMEntity = new BPMEntity();
         }
-        mBPMEntity.setUserId(UserDao.getCurrentUserId());
-        mBPMEntity.setSystolicData(systolicS);
-        mBPMEntity.setDiastolicData(diastolicS);
-        mBPMEntity.setMeanAPData("80.0");
-        mBPMEntity.setPulseData("70.0");
-        mBPMEntity.setTimeData(calendar.getTime());
-        mBPMEntity.setBpmId(UserDao.getCurrentUserId() + "-" + CommonUtil.getDateStr(calendar.getTime()));
+        mBPMEntity.setUser_id(UserDao.getCurrentUserId());
+        mBPMEntity.setSystolic(Integer.parseInt(systolicS));
+        mBPMEntity.setDiastolic(Integer.parseInt(diastolicS));
+        mBPMEntity.setMean(80);
+        mBPMEntity.setPulse(70);
+        mBPMEntity.setCheck_time(CommonUtil.getDateStr(calendar.getTime()));
         mBPMEntity.setUnit(getString(R.string.bpm_unit_mmhg));
+        mBPMEntity.setRobot_id(CommonUtil.getUUID(getApplicationContext()));
+        mBPMEntity.setId(CommonUtil.getRandomId());
+        updateViews();
         insertToNet(true);
-
-
-        if(Double.parseDouble(systolicS) > 140){
-            bPressType.setText("偏高");
-            bPressType.setTextColor(getColor(R.color.yellow));
-        }
-        if(Double.parseDouble(systolicS) > 150){
-            bPressType.setText("过高");
-            bPressType.setTextColor(getColor(R.color.red));
-        }
-
 
     }
 
@@ -290,16 +290,48 @@ public class BPMActivity extends BleProfileActivity implements BPMManagerCallbac
 
                     @Override
                     public void onSuccess(NetResponse value) {
+                        LogUtil.i("value"+value.toString());
                         if(value.getStatus() == 0 && isSave) {
-                            BPMTableController.getInstance(getApplicationContext()).insert(mBPMEntity);
+                            JSONObject object;
+                            try {
+                                object = new JSONObject(CommonUtil.entityToJson(value.getData()));
+                                mBPMEntity.setResult(Integer.parseInt(object.optString("result")));
+                                BPMTableController.getInstance(getApplicationContext()).insert(mBPMEntity);
+                                normalDiastolic.setText("低压正常范围为"+object.optString("diastolic"));
+                                normalSystolic.setText("高压正常范围为"+object.optString("systolic"));
+                                switch (mBPMEntity.getResult()){
+                                    case -2:
+                                        bPressType.setText("过低");
+                                        bPressType.setTextColor(getColor(R.color.red));
+                                        break;
+                                    case -1:
+                                        bPressType.setText("偏低");
+                                        bPressType.setTextColor(getColor(R.color.yellow));
+                                        break;
+                                    case 0:
+                                        bPressType.setText("正常");
+                                        bPressType.setTextColor(getColor(R.color.green));
+                                        break;
+                                    case 1:
+                                        bPressType.setText("偏高");
+                                        bPressType.setTextColor(getColor(R.color.yellow));
+                                        break;
+                                    case 2:
+                                        bPressType.setText("过高");
+                                        bPressType.setTextColor(getColor(R.color.red));
+                                        break;
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        //TODO 暂时先保存下来
-                        BPMTableController.getInstance(getApplicationContext()).insert(mBPMEntity);
                     }
                 });
     }

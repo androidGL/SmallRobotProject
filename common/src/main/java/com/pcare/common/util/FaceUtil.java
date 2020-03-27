@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
-import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -42,19 +41,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
-import retrofit2.http.Field;
 
 /**
  * @Author: gl
@@ -84,7 +76,10 @@ public class FaceUtil {
     private String faceUrl, userId;
     private String ugroup = "ASDFG1234";
     private volatile boolean isOpen = true;
+    private volatile int sendNum;
+    private volatile int receiveNum;
     private final int DELAYTIME = 1000;
+    private  int mDelayMillis = 200;
     private int oritentation = 1; // 1表示竖屏，2表示横屏
     private int mLength;
     private CountDownTimer mCountDownTimer;
@@ -96,10 +91,22 @@ public class FaceUtil {
         void detectFail();
     }
 
+    //退出识别
+    private void close(){
+        if (isOpen) {
+            isOpen = false;
+            if (!TextUtils.isEmpty(userId)) {
+                faceDetectListener.detectFail();
+            } else {
+                faceCompareListener.compareFail();
+            }
+        }
+        mCountDownTimer = null;
+    }
     //设置超时时间，需在开始识别前设置
-    public FaceUtil setTimeOut(int millis) {
-        if (millis > 0) {
-            mCountDownTimer = new CountDownTimer(millis, 1000) {
+    public FaceUtil setTimeOut(int allMillis,int delayMillis) {
+        if (allMillis > 0) {
+            mCountDownTimer = new CountDownTimer(allMillis, 1000) {
 
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -108,18 +115,13 @@ public class FaceUtil {
 
                 @Override
                 public void onFinish() {
-                    if (isOpen) {
-                        isOpen = false;
-                        if (!TextUtils.isEmpty(userId)) {
-                            faceDetectListener.detectFail();
-                        } else {
-                            faceCompareListener.compareFail();
-                        }
-                    }
-                    mCountDownTimer = null;
+                    close();
                 }
             };
             mCountDownTimer.start();
+        }
+        if(delayMillis>0){
+            this.mDelayMillis = delayMillis;
         }
         return this;
     }
@@ -303,7 +305,7 @@ public class FaceUtil {
                 textureView.setLayoutParams(lp);
                 //如果是横屏，需要逆时针旋转90度
                 if (oritentation == Configuration.ORIENTATION_LANDSCAPE) {
-                    textureView.setRotation(-90);
+                    textureView.setRotation(90);
                 }
                 mImageReader.setOnImageAvailableListener(mOnImageAvailableListener, mCameraHandler);
 
@@ -325,10 +327,10 @@ public class FaceUtil {
     }
 
     private Bitmap rotateBitmap(Bitmap bitmap) {
-        //如果是竖屏，需要旋转270度
-        if (bitmap != null && oritentation == Configuration.ORIENTATION_PORTRAIT) {
+        //照片需要旋转180度
+        if (bitmap != null) {
             Matrix m = new Matrix();
-            m.postRotate(270);
+            m.postRotate(180);
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
             return bitmap;
         }
@@ -344,10 +346,14 @@ public class FaceUtil {
                     return;
                 }
                 post();
-                timerHandler.postDelayed(this, DELAYTIME);
+                if(sendNum <10){
+                    timerHandler.postDelayed(this, DELAYTIME);
+                }
+                sendNum++;
+
             }
         };
-        timerHandler.postDelayed(timerRunnable, 200);
+        timerHandler.postDelayed(timerRunnable, mDelayMillis);
     }
 
     private void post() {
@@ -371,11 +377,19 @@ public class FaceUtil {
                                 faceDetectListener.detectSucess();
                                 isOpen = false;
                             }
+                            if(receiveNum >= 10){
+                                close();
+                            }
+                            receiveNum++;
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             e.printStackTrace();
+                            if(receiveNum >= 10){
+                                close();
+                            }
+                            receiveNum++;
                         }
                     });
         } else {
@@ -399,16 +413,24 @@ public class FaceUtil {
                                 if (response.getStatus() == 0) {
                                     jsonObject = new JSONObject(response.getData().toString());
                                     timerHandler.removeCallbacks(timerRunnable);
-                                    faceCompareListener.compareSucess(jsonObject.optString("userId"));
+                                    faceCompareListener.compareSucess(jsonObject.optString("user_id"));
                                     isOpen = false;
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            if(receiveNum >= 10){
+                                close();
+                            }
+                            receiveNum++;
                         }
 
                         @Override
                         public void onError(Throwable e) {
+                            if(receiveNum >= 10){
+                                close();
+                            }
+                            receiveNum++;
                             e.printStackTrace();
                         }
                     });

@@ -38,17 +38,17 @@ public class GlucoseRecycleAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof GluViewHolder) {
-            ((GluViewHolder) holder).timeView.setText(CommonUtil.getDateStr(glucoseEntities.get(position).getTimeDate()));
+            ((GluViewHolder) holder).timeView.setText(glucoseEntities.get(position).getCheck_time());
 
             try {
-                ((GluViewHolder) holder).detailsView.setText(mContext.getResources().getStringArray(R.array.gls_type)[glucoseEntities.get(position).getSampleType()]);
+                ((GluViewHolder) holder).detailsView.setText(mContext.getResources().getStringArray(R.array.gls_type)[glucoseEntities.get(position).getSample_type()]);
             } catch (final ArrayIndexOutOfBoundsException e) {
                 ((GluViewHolder) holder).detailsView.setText(mContext.getResources().getStringArray(R.array.gls_type)[0]);
             }
             ((GluViewHolder) holder).concentrationView.setText(mContext.getString(R.string.gls_value,
-                    Float.parseFloat(glucoseEntities.get(position).getGlucoseConcentration()) * 1000.0f)+mContext.getString(R.string.gls_unit_mmolpl));
+                    glucoseEntities.get(position).getGlucose())+mContext.getString(R.string.gls_unit_mmolpl));
             try {
-                ((GluViewHolder) holder).locationView.setText( mContext.getResources().getStringArray(R.array.gls_location)[glucoseEntities.get(position).getSampleLocation()]);
+                ((GluViewHolder) holder).locationView.setText( mContext.getResources().getStringArray(R.array.gls_location)[glucoseEntities.get(position).getSample_location()]);
             } catch (final ArrayIndexOutOfBoundsException e) {
                 ((GluViewHolder) holder).locationView.setText(mContext.getResources().getStringArray(R.array.gls_location)[0]);
             }
