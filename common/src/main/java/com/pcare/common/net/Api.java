@@ -98,7 +98,7 @@ public interface Api {
     //4，删除血压
     @POST("asks/bpress/")
     @FormUrlEncoded
-    Single<NetResponse> deleteBPM(@Field("operate") String operate,@Field("item") String id);//operate传参delete
+    Single<NetResponse> deleteBPM(@Field("operate") String operate,@Field("item") JSONObject id);//operate传参delete
 
 
     /**
@@ -112,7 +112,7 @@ public interface Api {
     @POST("asks/glu/")
     @FormUrlEncoded
     Single<NetResponse> getGLUList2(@Field("operate") String operate,@Field("item") JSONObject object);//operate传参query
-    //3,查询血糖
+    //3,查询血糖,可以条件查询
     @POST("asks/glu/")
     @FormUrlEncoded
     Single<NetResponse> getGLUList(@Field("operate") String operate,@Field("item") JSONObject object);//operate传参glu_query_user_id

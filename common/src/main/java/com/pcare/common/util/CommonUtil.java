@@ -116,7 +116,7 @@ public class CommonUtil {
      * @param <T>
      * @return
      */
-    public <T> T fromJson(String s,Class<T> cls){
+    public static <T> T fromJson(String s,Class<T> cls){
         return new Gson().fromJson(s,cls);
 
     }

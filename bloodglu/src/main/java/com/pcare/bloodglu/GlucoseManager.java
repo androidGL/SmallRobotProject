@@ -112,7 +112,6 @@ public class GlucoseManager extends BatteryManager<BatteryManagerCallbacks> {
 							record.setGlucose(glucoseConcentration != null ? glucoseConcentration : 0);
 							record.setSample_type(type != null ? type : 0);
 							record.setSample_location(sampleLocation != null ? sampleLocation : 0);
-							record.setStatus( status != null ? status.value : 0);
 							record.setUser_id(UserDao.getCurrentUserId());
 							//如果存在新的记录，则回调
 							if(!GluTableController.getInstance(mContext).isExistSameItem(record)) {

@@ -94,7 +94,7 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
     @Override
     public void start() {
         super.start();
-        testHistory();
+//        testHistory();
     }
 
     @Override
@@ -234,7 +234,7 @@ public class GlucoseActivity extends BleProfileExpandableListActivity implements
         entity.setGlucose(Double.parseDouble(valueS));
         entity.setSample_type(0);
         entity.setSample_location(0);
-        entity.setStatus( 0);
+        entity.setStatus( 1);
         entity.setUnit("mmol/l");
         entity.setRobot_id(CommonUtil.getUUID(getApplicationContext()));
         entity.setId(CommonUtil.getRandomId());

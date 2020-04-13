@@ -5,6 +5,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:paddingBottom="2dp"
 	android:paddingEnd="4dp"
+	android:longClickable="true"
 	android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
 	android:paddingTop="4dp">
 

@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +21,16 @@ import com.pcare.common.entity.BPMEntity;
 import com.pcare.common.entity.NetResponse;
 import com.pcare.common.net.Api;
 import com.pcare.common.net.RetrofitHelper;
-import com.pcare.common.table.BPMTableController;
 import com.pcare.common.table.UserDao;
+import com.pcare.common.util.CommonToast;
 import com.pcare.common.util.CommonUtil;
-import com.pcare.common.util.LogUtil;
+import com.pcare.common.view.CommonAlertDialog;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +46,7 @@ import io.reactivex.schedulers.Schedulers;
 public class BPMHistoryActivity extends BaseActivity {
 
     private RecyclerView bpmListView;
-    private List<BPMEntity> bpmList;
+    private List<BPMEntity> bpmList = new ArrayList<>();
     private TextView startView, endView;
     private Date startDate, endDate;
 
@@ -70,15 +70,6 @@ public class BPMHistoryActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        super.initData();
-        //获取当前用户的血压记录
-        bpmList = BPMTableController.getInstance(getApplicationContext()).searchByUserId(UserDao.getCurrentUserId());
-        if (bpmList.size() <= 0) {
-            findViewById(R.id.null_view).setVisibility(View.VISIBLE);
-            bpmListView.setVisibility(View.GONE);
-            return;
-        }
-
         bpmListView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         bpmListView.setAdapter(new RecyclerView.Adapter() {
             @NonNull
@@ -118,6 +109,17 @@ public class BPMHistoryActivity extends BaseActivity {
                         ((ItemHolder) holder).typeView.setText("过低");
                         ((ItemHolder) holder).typeView.setBackgroundResource(R.mipmap.circle_red);
                     }
+                    ((ItemHolder) holder).itemView.setOnLongClickListener(v -> {
+                        CommonAlertDialog.Builder(BPMHistoryActivity.this)
+                                .setCancelText("否")
+                                .setConfirmText("删除")
+                                .setMessage("是否删除这个结果")
+                                .setOnConfirmClickListener(view -> {
+                                    delete(bpmList.get(position).getId(),position);
+                                }).build().shown();
+                        return true;
+                    });
+
                 }
             }
 
@@ -128,24 +130,80 @@ public class BPMHistoryActivity extends BaseActivity {
         });
         getNetValueList();
     }
-    private void getNetValueList(){
-        JSONObject object = new JSONObject();
+
+    private void delete(String id,int position){
+        JSONObject jsonObject = new JSONObject();
         try {
-            object.putOpt("user_id",UserDao.get(getApplicationContext()).getCurrentUser().getUser_id());
-            object.putOpt("query_date_begin",CommonUtil.getDateStr(startDate));
-            object.putOpt("query_date_end",CommonUtil.getDateStr(endDate));
+            jsonObject.putOpt("id",id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         RetrofitHelper.getInstance().getRetrofit()
                 .create(Api.class)
-                .getBPMList("bpress_query_user_id",object)
+                .deleteBPM("delete", jsonObject)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribeWith(new DisposableSingleObserver<NetResponse>() {
                     @Override
                     public void onSuccess(NetResponse value) {
-                        LogUtil.i("value: "+value.toString());
+                        if(value.getStatus() == 0){
+                            CommonToast.showShortToast(getApplicationContext(),"删除数据成功", CommonToast.SUCCESS);
+                            bpmList.remove(position);
+                            bpmListView.getAdapter().notifyDataSetChanged();
+                            return;
+                        }
+                        CommonToast.showShortToast(getApplicationContext(),"删除数据失败", CommonToast.FAILED);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        CommonToast.showShortToast(getApplicationContext(),"删除数据失败", CommonToast.FAILED);
+                    }
+                });
+    }
+
+    private void getNetValueList() {
+        JSONObject object = new JSONObject();
+        try {
+            object.putOpt("user_id", UserDao.get(getApplicationContext()).getCurrentUser().getUser_id());
+            if (null != startDate)
+                object.putOpt("query_date_begin", CommonUtil.getDateStr(startDate,"yyyy-MM-dd"));
+            if (null != endDate)
+                object.putOpt("query_date_end", CommonUtil.getDateStr(endDate,"yyyy-MM-dd"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RetrofitHelper.getInstance().getRetrofit()
+                .create(Api.class)
+                .getBPMList("bpress_query_user_id", object)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribeWith(new DisposableSingleObserver<NetResponse>() {
+                    @Override
+                    public void onSuccess(NetResponse value) {
+                        if(value.getStatus() == 0){
+                            bpmList.clear();
+                            JSONObject object;
+                            try {
+                                object = new JSONObject(CommonUtil.entityToJson(value.getData()));
+                                JSONArray info = object.optJSONArray("info");
+                                for (int i = 0;i<info.length();i++){
+                                    bpmList.add(CommonUtil.fromJson(info.optJSONObject(i).toString(),BPMEntity.class));
+                                }
+                                bpmListView.getAdapter().notifyDataSetChanged();
+                                if (bpmList.size() <= 0) {
+                                    findViewById(R.id.null_view).setVisibility(View.VISIBLE);
+                                    bpmListView.setVisibility(View.GONE);
+                                }else {
+                                    findViewById(R.id.null_view).setVisibility(View.GONE);
+                                    bpmListView.setVisibility(View.VISIBLE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
                     }
 
                     @Override
@@ -156,29 +214,21 @@ public class BPMHistoryActivity extends BaseActivity {
     }
 
     public void filterList(View v) {
-        if (null == startDate) {
-            startDate = new Date();
-            if (null == endDate) {
-                Toast.makeText(this, "请选择起始日期或结束日期", Toast.LENGTH_SHORT).show();
+        if (null != endDate && null == startDate) {
+                Toast.makeText(this, "请选择起始日期", Toast.LENGTH_SHORT).show();
                 return;
-            }
         }
-        if (null == endDate)
-            endDate = new Date(System.currentTimeMillis());
-        bpmList = BPMTableController.getInstance(getApplicationContext())
-                .searchByUserId(UserDao.getCurrentUserId(), startDate, endDate);
-        bpmListView.getAdapter().notifyDataSetChanged();
+       getNetValueList();
     }
 
     public void clearDate(View v) {
         startView.setText("");
         endView.setText("");
-        startDate = null;
-        endDate = null;
-        bpmList = BPMTableController.getInstance(getApplicationContext())
-                .searchByUserId(UserDao.getCurrentUserId());
-        bpmListView.getAdapter().notifyDataSetChanged();
-
+        if(startDate != null || endDate != null){
+            startDate = null;
+            endDate = null;
+            getNetValueList();
+        }
     }
 
     public void selectDate(View v) {
@@ -186,11 +236,11 @@ public class BPMHistoryActivity extends BaseActivity {
             switch (v.getTag().toString()) {
                 case "start":
                     startView.setText(year + "年" + (month + 1) + "月" + dayOfMonth + "日");
-                    startDate = CommonUtil.getDate(year + "-" + (month + 1) + "-" + dayOfMonth);
+                    startDate = CommonUtil.getDate(year + "-" + (month + 1) + "-" + dayOfMonth,"yyyy-MM-dd");
                     break;
                 case "end":
                     endView.setText(year + "年" + (month + 1) + "月" + dayOfMonth + "日");
-                    endDate = CommonUtil.getDate(year + "-" + (month + 1) + "-" + dayOfMonth);
+                    endDate = CommonUtil.getDate(year + "-" + (month + 1) + "-" + dayOfMonth,"yyyy-MM-dd");
                     break;
             }
 
@@ -203,6 +253,7 @@ public class BPMHistoryActivity extends BaseActivity {
 
     private class ItemHolder extends RecyclerView.ViewHolder {
         private TextView timeView, systolicView, diastolicView, meanAPView, pulseView, typeView;
+        private View itemView;
 
         public ItemHolder(View itemView) {
             super(itemView);
@@ -212,6 +263,7 @@ public class BPMHistoryActivity extends BaseActivity {
             meanAPView = itemView.findViewById(R.id.bpm_mean_ap);
             pulseView = itemView.findViewById(R.id.bpm_pulse);
             typeView = itemView.findViewById(R.id.bpm_type);
+            this.itemView = itemView;
 
         }
     }
