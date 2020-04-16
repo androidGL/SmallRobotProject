@@ -22,6 +22,7 @@ import com.pcare.common.util.LogUtil;
 import com.pcare.common.util.PermissionHelper;
 import com.pcare.common.view.CommonAlertDialog;
 import com.pcare.rebot.R;
+import com.pcare.rebot.activity.flutter.FlutterFragmentPage;
 import com.pcare.rebot.activity.web.IndexActivity;
 
 @Route(path = "app/main")
@@ -156,7 +157,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toSettingPage(View view) {
-        startActivity(new Intent(MainActivity.this, SettingActivity.class));
+//        startActivity(new Intent(MainActivity.this, SettingActivity.class));
+        startActivity(new Intent(MainActivity.this, FlutterFragmentPage.class));
     }
 
     public void toRegisterPage(View view) {

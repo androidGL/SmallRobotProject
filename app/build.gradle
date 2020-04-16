@@ -62,4 +62,5 @@ dependencies {
         implementation project(':bloodpressure')
     }
     implementation project(path: ':common')
+    implementation project(':flutter')
 }
