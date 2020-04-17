@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -23,6 +24,9 @@ import com.pcare.common.util.PermissionHelper;
 import com.pcare.common.view.CommonAlertDialog;
 import com.pcare.rebot.R;
 import com.pcare.rebot.activity.web.IndexActivity;
+
+import io.flutter.embedding.android.FlutterFragment;
+import io.flutter.embedding.android.FlutterView;
 
 @Route(path = "app/main")
 public class MainActivity extends BaseActivity {
@@ -160,7 +164,19 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toRegisterPage(View view) {
+//        startActivityForResult(new Intent(this,TestActivity.class),101);
         startActivity(new Intent(this, RegisterActivity.class));
+    }
+    public void testFlutter(View view) {
+        FlutterFragment flutterFragment = FlutterFragment.createDefault();
+        getSupportFragmentManager()
+                .beginTransaction()
+        .add()
+        .commit();
+
+
+
+
     }
     public void toLogin(View view) {
         //跳转到人脸识别的界面
@@ -173,6 +189,8 @@ public class MainActivity extends BaseActivity {
         if (requestCode == 100 && resultCode == 200) {
             LogUtil.i("登陆成功，保存用户数据");
             initResumeData();
+        }else if(requestCode == 101 && resultCode == 201){
+            LogUtil.i("aaaaaaaaaaaaaaaaaaaaaaaa");
         }
     }
 }

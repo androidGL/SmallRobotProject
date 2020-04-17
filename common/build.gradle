@@ -75,6 +75,8 @@ dependencies {
 
     api rootProject.ext.dependencies["greendao"]
 
+    api project(':flutter')
+
 
     //以下是OEM的包
     api 'no.nordicsemi.android:log:2.2.0'

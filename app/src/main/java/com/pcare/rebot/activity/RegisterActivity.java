@@ -10,7 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pcare.common.base.BaseActivity;
+import com.pcare.common.entity.NetResponse;
 import com.pcare.common.entity.UserEntity;
+import com.pcare.common.net.Api;
+import com.pcare.common.net.RetrofitHelper;
 import com.pcare.common.table.UserDao;
 import com.pcare.common.util.CommonUtil;
 import com.pcare.common.util.LogUtil;
@@ -21,6 +24,15 @@ import com.pcare.common.view.YearPickerDialog;
 import com.pcare.rebot.R;
 import com.pcare.rebot.contract.RegisterContract;
 import com.pcare.rebot.presenter.RegisterPresenter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -145,7 +157,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
             mUserInfo.setUser_id(id);
             startActivityForResult(new Intent(this, FaceActivity.class)
                     .putExtra("type", 0)
-                    .putExtra("userId", id),100);
+                    .putExtra("userId", id), 100);
         }
 
     }
@@ -160,8 +172,6 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     public void verifiedName(boolean visible) {
         findViewById(R.id.view_infoname_tip).setVisibility(visible ? View.GONE : View.VISIBLE);
     }
-
-
 
     public void toRegister(View view) {
         if (TextUtils.isEmpty(userTypeName)) {
@@ -195,8 +205,10 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
         else
             mUserInfo.setUserGender(1);
         mUserInfo.setUserBirthYear(selectYear);
-        mUserInfo.setUserWeight(Integer.parseInt(infoWeightView.getText().toString()));
-        mUserInfo.setUserStature(Integer.parseInt(infoStatureView.getText().toString()));
+        if (!TextUtils.isEmpty(infoWeightView.getText().toString()))
+            mUserInfo.setUserWeight(Integer.parseInt(infoWeightView.getText().toString()));
+        if (!TextUtils.isEmpty(infoStatureView.getText().toString()))
+            mUserInfo.setUserStature(Integer.parseInt(infoStatureView.getText().toString()));
         mUserInfo.setUserRobotId(CommonUtil.getUUID(getApplicationContext()));
         mUserInfo.setUserHistoty(infoHistory);
 
@@ -207,13 +219,36 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == 200) {
             LogUtil.i("注册成功，保存用户数据");
             UserDao.get(getApplicationContext()).insertUser(mUserInfo);
             UserDao.get(getApplicationContext()).setCurrentUser(mUserInfo);
             LogUtil.i(CommonUtil.entityToJson(mUserInfo));
             startActivity(new Intent(this, MainActivity.class));
+        }else if(requestCode == 100 && resultCode == -1){
+            JSONObject object = new JSONObject();
+            try {
+                object.putOpt("user_id",mUserInfo.getUser_id());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            RetrofitHelper.getInstance().getRetrofit()
+                    .create(Api.class)
+                    .deleteDeepUser(object)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.newThread())
+                    .subscribeWith(new DisposableSingleObserver<NetResponse>() {
+                        @Override
+                        public void onSuccess(NetResponse value) {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
         }
     }
 }

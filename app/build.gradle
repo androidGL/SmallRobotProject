@@ -61,5 +61,8 @@ dependencies {
     if (isNeedBPModule.toBoolean()) {
         implementation project(':bloodpressure')
     }
+
     implementation project(path: ':common')
+    implementation project(':flutter')
+
 }

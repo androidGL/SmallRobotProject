@@ -522,72 +522,76 @@ public class TestActivity extends BaseActivity {
     };
 
     public void testAudioTrack(View view) {
-        tag = true;
-        JSONObject object = new JSONObject();
-        try {
-            object.putOpt("text",s);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        WsStatusListener listener = new WsStatusListener() {
-            @Override
-            public void onOpen(Response response) {
-                super.onOpen(response);
-                LogUtil.i("onOpen"+response.toString());
-                util.setOnStateListener(stateListener);
-                manager.send(object.toString());
-            }
+        setResult(201);
+        finish();
 
-            @Override
-            public void onMessage(String text) {
-                super.onMessage(text);
-                array.append(array.size(),text);
-                if(tag && position<=array.size()-1) {
-                    util.startPlay(array.get(position));
-                    position++;
-                }
-            }
-
-            @Override
-            public void onMessage(ByteString bytes) {
-                super.onMessage(bytes);
-                LogUtil.i("onMessage2"+bytes.base64());
-            }
-
-            @Override
-            public void onClosing(int code, String reason) {
-                super.onClosing(code, reason);
-                LogUtil.i("onClosing"+reason);
-            }
-
-            @Override
-            public void onClosed(String reason) {
-                super.onClosed(reason);
-                LogUtil.i("onClosed"+reason);
-            }
-
-            @Override
-            public void onFailure(Throwable t, Response response) {
-                super.onFailure(t, response);
-                t.printStackTrace();
-                LogUtil.i("onFailure"+response.toString());
-            }
-
-            @Override
-            public void onReconnect() {
-                super.onReconnect();
-                LogUtil.i("onReconnect");
-            }
-        };
-
-        manager = new WsManager.Builder()
-                .client(new OkHttpClient().newBuilder()
-                        .pingInterval(60, TimeUnit.SECONDS)//设置的60秒后断开连接
-                        .retryOnConnectionFailure(true)
-                        .build())
-                .listener(listener)
-                .url(Api.AUDIOURL+"/tts/")
-                .build();
-        manager.startConnect();
+//
+//        tag = true;
+//        JSONObject object = new JSONObject();
+//        try {
+//            object.putOpt("text",s);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        WsStatusListener listener = new WsStatusListener() {
+//            @Override
+//            public void onOpen(Response response) {
+//                super.onOpen(response);
+//                LogUtil.i("onOpen"+response.toString());
+//                util.setOnStateListener(stateListener);
+//                manager.send(object.toString());
+//            }
+//
+//            @Override
+//            public void onMessage(String text) {
+//                super.onMessage(text);
+//                array.append(array.size(),text);
+//                if(tag && position<=array.size()-1) {
+//                    util.startPlay(array.get(position));
+//                    position++;
+//                }
+//            }
+//
+//            @Override
+//            public void onMessage(ByteString bytes) {
+//                super.onMessage(bytes);
+//                LogUtil.i("onMessage2"+bytes.base64());
+//            }
+//
+//            @Override
+//            public void onClosing(int code, String reason) {
+//                super.onClosing(code, reason);
+//                LogUtil.i("onClosing"+reason);
+//            }
+//
+//            @Override
+//            public void onClosed(String reason) {
+//                super.onClosed(reason);
+//                LogUtil.i("onClosed"+reason);
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t, Response response) {
+//                super.onFailure(t, response);
+//                t.printStackTrace();
+//                LogUtil.i("onFailure"+response.toString());
+//            }
+//
+//            @Override
+//            public void onReconnect() {
+//                super.onReconnect();
+//                LogUtil.i("onReconnect");
+//            }
+//        };
+//
+//        manager = new WsManager.Builder()
+//                .client(new OkHttpClient().newBuilder()
+//                        .pingInterval(60, TimeUnit.SECONDS)//设置的60秒后断开连接
+//                        .retryOnConnectionFailure(true)
+//                        .build())
+//                .listener(listener)
+//                .url(Api.AUDIOURL+"/tts/")
+//                .build();
+//        manager.startConnect();
     }
 }

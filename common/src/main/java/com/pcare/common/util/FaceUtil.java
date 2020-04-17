@@ -96,7 +96,7 @@ public class FaceUtil {
         if (isOpen) {
             isOpen = false;
             if (!TextUtils.isEmpty(userId)) {
-                faceDetectListener.detectFail();
+//                faceDetectListener.detectFail();
             } else {
                 faceCompareListener.compareFail();
             }
@@ -369,13 +369,14 @@ public class FaceUtil {
 
                         @Override
                         public void onSuccess(NetResponse response) {
-                            if (!isOpen)
-                                return;
+//                            if (!isOpen)
+//                                return;
                             Log.i(TAG, "Response:" + response.toString());
                             if (response.getStatus() == 0) {
-                                timerHandler.removeCallbacks(timerRunnable);
                                 faceDetectListener.detectSucess();
                                 isOpen = false;
+                                if(null != timerHandler && null != timerRunnable)
+                                    timerHandler.removeCallbacks(timerRunnable);
                             }
                             if(receiveNum >= 10){
                                 close();

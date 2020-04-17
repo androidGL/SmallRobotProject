@@ -9,6 +9,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.pcare.common.R;
 import com.pcare.common.table.UserDao;
@@ -16,7 +18,7 @@ import com.pcare.common.view.UserListDialog;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity<P extends IPresenter> extends Activity implements IView {
+public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivity implements IView {
     protected P presenter;
     private TextView userNameText; //用户姓名
 

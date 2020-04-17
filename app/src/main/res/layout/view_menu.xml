@@ -59,6 +59,25 @@
             android:layout_marginLeft="20dp"
             android:text="新增用户"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:onClick="testFlutter"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/register"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:text="Flutter测试"/>
+    </LinearLayout>
 
 
 </LinearLayout>

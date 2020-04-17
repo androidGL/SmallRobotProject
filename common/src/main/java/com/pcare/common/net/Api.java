@@ -21,8 +21,8 @@ import retrofit2.http.Query;
 
 public interface Api {
 //    String BASEURL = "http://192.168.13.192:8080";//武祥成本地
-//    String BASEURL = "http://192.168.2.181:8000";//张宇阔本地
-    String BASEURL = "http://192.168.2.180:8000";//服务器
+    String BASEURL = "http://192.168.2.181:8000";//张宇阔本地
+//    String BASEURL = "http://192.168.2.180:8000";//服务器
 
     //header中添加 URL_KEY，表示这个请求是需要替换BaseUrl的
     String URL_KEY = "URL_KEY";
@@ -78,6 +78,18 @@ public interface Api {
     @POST("face/search64")
     @FormUrlEncoded
     Single<NetResponse> compareFace(@Field("image_base64") String imageBase64);
+    //6，查询用户
+    @POST("users/get_robot_id_users/")
+    @FormUrlEncoded
+    Single<NetResponse> getUserList(@Field("item") JSONObject robotId) ;
+    //7,删除用户
+    @POST("users/delete/")
+    @FormUrlEncoded
+    Single<NetResponse> deleteUser(@Field("item") JSONObject object);
+    //7,深度删除用户
+    @POST("users/delete_deep/")
+    @FormUrlEncoded
+    Single<NetResponse> deleteDeepUser(@Field("item") JSONObject object);
 
 
     /**
@@ -142,8 +154,7 @@ public interface Api {
     @FormUrlEncoded
     Single<ResponseBody> ask(@Field("query") String question);
 
-    @POST("search64")
-    Single<NetResponse> getUserList(@Query("image_base64") String imageBase64) ;
+
     @Headers({URL_KEY+":"+URL_VALUE_AUDIO})
     @GET("tts")
     Single<ResponseBody> playAudio(@Query("text") String text);

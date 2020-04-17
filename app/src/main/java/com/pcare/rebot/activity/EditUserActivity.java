@@ -26,11 +26,11 @@ import com.pcare.rebot.presenter.EditUserPresenter;
  * @CreateDate: 2020/3/16
  * @Description:
  */
-public class EditUserActivity extends BaseActivity<EditUserPresenter> implements EditUserContract.View  {
+public class EditUserActivity extends BaseActivity<EditUserPresenter> implements EditUserContract.View {
 
     private TextView yearView;
     private ScreenCheckBox male, female;
-    private EditText infoNameView, infoNickNameView, infoStatureView, infoWeightView,healthyView4;
+    private EditText infoNameView, infoNickNameView, infoStatureView, infoWeightView, healthyView4;
     private TextView infoTypeNameView;
     private TextView titleView;
     private UserEntity mUserInfo;
@@ -40,6 +40,7 @@ public class EditUserActivity extends BaseActivity<EditUserPresenter> implements
     private String infoHistory;
     private CheckBoxGroup historyCheckboxView;
     private String[] history;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_register;
@@ -47,7 +48,7 @@ public class EditUserActivity extends BaseActivity<EditUserPresenter> implements
 
     @Override
     protected EditUserPresenter bindPresenter() {
-        return  new EditUserPresenter((EditUserContract.View) getSelfActivity());
+        return new EditUserPresenter((EditUserContract.View) getSelfActivity());
     }
 
     @Override
@@ -68,8 +69,8 @@ public class EditUserActivity extends BaseActivity<EditUserPresenter> implements
         healthyView4 = findViewById(R.id.healthy4);
         historyCheckboxView = findViewById(R.id.view_history_checkbox);
         history = getResources().getStringArray(R.array.history);
-        for(String name: history){
-            historyCheckboxView.addView(new ScreenCheckBox(this,name));
+        for (String name : history) {
+            historyCheckboxView.addView(new ScreenCheckBox(this, name));
         }
 
     }
@@ -142,21 +143,23 @@ public class EditUserActivity extends BaseActivity<EditUserPresenter> implements
             return;
         }
         infoHistory = "";
-        for (int i = 0;i<historyCheckboxView.getChildCount();i++){
+        for (int i = 0; i < historyCheckboxView.getChildCount(); i++) {
             ScreenCheckBox checkBox = (ScreenCheckBox) historyCheckboxView.getChildAt(i);
-            if(checkBox.isChecked()){
-                infoHistory += checkBox.getTextString()+",";
+            if (checkBox.isChecked()) {
+                infoHistory += checkBox.getTextString() + ",";
             }
         }
         mUserInfo.setNickName(infoNickNameView.getText().toString());
         mUserInfo.setUserType(userType);
-        if(male.isChecked())
+        if (male.isChecked())
             mUserInfo.setUserGender(0);
         else
             mUserInfo.setUserGender(1);
         mUserInfo.setUserBirthYear(selectYear);
-        mUserInfo.setUserWeight(Integer.parseInt(infoWeightView.getText().toString()));
-        mUserInfo.setUserStature(Integer.parseInt(infoStatureView.getText().toString()));
+        if (!TextUtils.isEmpty(infoWeightView.getText().toString()))
+            mUserInfo.setUserWeight(Integer.parseInt(infoWeightView.getText().toString()));
+        if (!TextUtils.isEmpty(infoStatureView.getText().toString()))
+            mUserInfo.setUserStature(Integer.parseInt(infoStatureView.getText().toString()));
         mUserInfo.setUserHistoty(infoHistory);
         LogUtil.i(CommonUtil.entityToJson(mUserInfo));
         presenter.editUser(mUserInfo);

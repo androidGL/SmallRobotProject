@@ -16,6 +16,7 @@ import com.pcare.common.base.BaseActivity;
 import com.pcare.common.base.IPresenter;
 import com.pcare.common.entity.UserEntity;
 import com.pcare.common.table.UserDao;
+import com.pcare.common.util.CommonUtil;
 import com.pcare.common.view.CommonAlertDialog;
 import com.pcare.rebot.R;
 import com.pcare.rebot.contract.UserListContract;
@@ -67,10 +68,8 @@ public class UserListActivity extends BaseActivity<UserListPresenter> implements
                                 .setOnConfirmClickListener(new CommonAlertDialog.OnConfirmClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        UserDao.get(getApplicationContext()).deleteUserById(userInfoList.get(position).getUser_id());
-//                            presenter.deleteUser(userInfoList.get(position).getUser_id());
-                                        userInfoList.remove(position);
-                                        notifyDataSetChanged();
+                                        presenter.deleteUser(userInfoList.get(position).getUser_id());
+
                                     }
                                 }).build().shown();
 
@@ -102,13 +101,21 @@ public class UserListActivity extends BaseActivity<UserListPresenter> implements
     @Override
     protected void onResume() {
         super.onResume();
-        userInfoList = UserDao.get(getApplicationContext()).getUserList();
-        adapter.notifyDataSetChanged();
+        presenter.getUserList(CommonUtil.getUUID(getApplicationContext()));
+
     }
 
     @Override
-    public void refreshList(String msg) {
+    public void refreshList(String msg,String id) {
+        userInfoList.remove(UserDao.get(getApplicationContext()).getUserById(id));
+        adapter.notifyDataSetChanged();
+        UserDao.get(getApplicationContext()).deleteUserById(id);
+    }
 
+    @Override
+    public void setUserList(List<UserEntity> list) {
+        userInfoList = list;
+        adapter.notifyDataSetChanged();
     }
 
     private class ItemHolder extends RecyclerView.ViewHolder{
