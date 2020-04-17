@@ -1,1 +1,7 @@
 include ':app', ':ecg', ':common', ':inquiry', ':bloodpressure', ':bloodglu'
+// 加入下面配置
+setBinding(new Binding([gradle: this]))
+evaluate(new File(
+        settingsDir.parentFile,
+        'flutter_module/.android/include_flutter.groovy'
+))
