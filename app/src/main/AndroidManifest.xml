@@ -57,7 +57,6 @@
         <activity android:name=".activity.web.IndexActivity" />
         <activity android:name=".activity.web.WebViewActivity" />
         <activity android:name=".activity.EditUserActivity" />
-        <activity android:name=".activity.flutter.FlutterFragmentPage" />
     </application>
 
 </manifest>

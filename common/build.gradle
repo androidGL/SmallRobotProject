@@ -75,7 +75,6 @@ dependencies {
 
     api rootProject.ext.dependencies["greendao"]
 
-    api project(':flutter')
 
 
     //以下是OEM的包

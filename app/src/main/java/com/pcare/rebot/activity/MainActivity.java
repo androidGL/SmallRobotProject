@@ -11,7 +11,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.facade.callback.NavCallback;
+import com.alibaba.android.arouter.facade.callback.NavigationCallback;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.pcare.common.base.BaseActivity;
 import com.pcare.common.base.IPresenter;
@@ -23,11 +26,7 @@ import com.pcare.common.util.LogUtil;
 import com.pcare.common.util.PermissionHelper;
 import com.pcare.common.view.CommonAlertDialog;
 import com.pcare.rebot.R;
-import com.pcare.rebot.activity.flutter.FlutterFragmentPage;
 import com.pcare.rebot.activity.web.IndexActivity;
-
-import io.flutter.embedding.android.FlutterFragment;
-import io.flutter.embedding.android.FlutterView;
 
 @Route(path = "app/main")
 public class MainActivity extends BaseActivity {
@@ -77,10 +76,11 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toInquiryPage(View view) {
-//        if (!isLogin()) {
-//            Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        if (!isLogin()) {
+            Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //模拟用户
         if(null != UserDao.get(getApplicationContext()).getUserById("77a6188f-598d-3a90-b298-d50864548ee9")){
             UserDao.get(getApplicationContext()).setCurrentUser("77a6188f-598d-3a90-b298-d50864548ee9");
         }
@@ -143,7 +143,27 @@ public class MainActivity extends BaseActivity {
         }
         ARouter.getInstance().build("/bp/main")
                 .withString("key1", "血压检测")
-                .navigation();
+                .navigation(this, new NavigationCallback() {
+                    @Override
+                    public void onFound(Postcard postcard) {
+
+                    }
+
+                    @Override
+                    public void onLost(Postcard postcard) {
+
+                    }
+
+                    @Override
+                    public void onArrival(Postcard postcard) {
+
+                    }
+
+                    @Override
+                    public void onInterrupt(Postcard postcard) {
+
+                    }
+                });
     }
 
     private boolean isLogin() {
@@ -161,24 +181,12 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toSettingPage(View view) {
-//        startActivity(new Intent(MainActivity.this, SettingActivity.class));
-        startActivity(new Intent(MainActivity.this, FlutterFragmentPage.class));
+        startActivity(new Intent(MainActivity.this, SettingActivity.class));
     }
 
     public void toRegisterPage(View view) {
 //        startActivityForResult(new Intent(this,TestActivity.class),101);
         startActivity(new Intent(this, RegisterActivity.class));
-    }
-    public void testFlutter(View view) {
-        FlutterFragment flutterFragment = FlutterFragment.createDefault();
-        getSupportFragmentManager()
-                .beginTransaction()
-        .add()
-        .commit();
-
-
-
-
     }
     public void toLogin(View view) {
         //跳转到人脸识别的界面

@@ -18,7 +18,7 @@ import com.pcare.common.view.UserListDialog;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivity implements IView {
+public abstract class BaseActivity<P extends IPresenter> extends Activity implements IView {
     protected P presenter;
     private TextView userNameText; //用户姓名
 
